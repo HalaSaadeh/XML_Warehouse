@@ -1,53 +1,127 @@
 import sys
 import PyQt5.QtCore
 import PyQt5.QtWidgets
+from PyQt5.QtCore import QDate
 from PyQt5.uic import loadUi
 import PyQt5
 from PyQt5.QtWidgets import QDialog
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QApplication,QFileDialog,QDialog,QTextEdit
+from PyQt5.QtWidgets import QApplication, QFileDialog, QDialog, QTextEdit
 from firebase import firebase
 
 firebase = firebase.FirebaseApplication("https://xml-warehouse.firebaseio.com/", None)
+
+
+class AddFiles(QDialog):
+    def __init__(self):
+        super(AddFiles, self).__init__()
+        loadUi("addfiles.ui", self)
+        self.viewFiles.clicked.connect(viewFilestab)
+        self.viewloaddata()
+        self.groupName.setVisible(False)
+        self.nameField.setVisible(False)
+        self.warning.setVisible(False)
+        self.entername1.setVisible(False)
+        self.entername2.setVisible(False)
+        self.versionSuccess.setVisible(False)
+        self.dateEdit.setDate(QDate.currentDate())
+        self.browse.clicked.connect(self.browsefile)
+        self.add.clicked.connect(self.addVersion)
+
+    def viewloaddata(self):
+        list = firebase.get("/", "")
+        for a in list:
+            self.comboBox.addItem(a)
+        self.comboBox.addItem("New file group...")
+        self.comboBox.currentIndexChanged.connect(self.updateFields)
+
+    def updateFields(self):
+        self.name.setText("")
+        self.uploadField.setText("")
+        self.groupName.setVisible(False)
+        self.nameField.setVisible(False)
+        if self.comboBox.currentText() == "New file group...":
+            self.addnewfile()
+        else:
+            field = '/' + self.comboBox.currentText() + "/versions"
+            list = firebase.get(field, "")
+            self.versionNum.setText(str(len(list) + 1))
+            self.versionNum.setReadOnly(True)
+
+    def addnewfile(self):
+        self.groupName.setVisible(True)
+        self.nameField.setVisible(True)
+        self.versionNum.setText(str(1))
+        self.versionNum.setReadOnly(True)
+
+    def addVersion(self):
+        if self.validateName and self.validateFileName and self.validateGroupName:
+            print("hi")
+
+    def validateName(self):
+        if len(self.name.text()) == 0:
+            self.entername1.setVisible(True)
+            return False
+        else:
+            return True
+
+    def validateFileName(self):
+        if len(self.uploadField.text()) == 0:
+            self.warning.setVisible(True)
+            return False
+        else:
+            return True
+
+    def validateGroupName(self):
+        print("hello")
+
+    def browsefile(self):
+        fname = QFileDialog.getOpenFileName(self, 'Open file',
+                                            'c:\\Users\halas\PycharmProjects\XML Warehouse', "XML files (*.xml)")
+        self.uploadField.setText(fname[0])
+
+
 class MainWindow(QDialog):
     def __init__(self):
         super(MainWindow, self).__init__()
-        loadUi("mainwindow.ui", self)
-        self.viewFiles.clicked.connect(viewFilestab)
-
-class ViewFiles(QDialog):
-    def __init__(self):
-        super(ViewFiles,self).__init__()
-        loadUi("viewfiles.ui",self)
-        self.tableWidget.setColumnWidth(0,160)
-        self.tableWidget.setColumnWidth(1, 290)
-        self.tableWidget.setColumnWidth(2, 160)
-        self.tableWidget.setColumnWidth(3, 160)
+        loadUi("viewfiles.ui", self)
+        self.tableWidget.setColumnWidth(0, 120)
+        self.tableWidget.setColumnWidth(1, 190)
+        self.tableWidget.setColumnWidth(2, 150)
+        self.viewloaddata()
+        self.addFiles.clicked.connect(addFilestab)
+        self.previewBox.setVisible(False)
+        self.previewLabel.setVisible(False)
 
     def viewloaddata(self):
-        list=firebase.get("/","")
+        list = firebase.get("/", "")
         for a in list:
             self.comboBox.addItem(a)
         self.comboBox.currentIndexChanged.connect(self.loadtable)
         print(self.tableWidget.selectedItems())
 
     def loadtable(self):
-        field='/'+self.comboBox.currentText()
-        list=firebase.get(field,"")
+        field = '/' + self.comboBox.currentText() + "/versions"
+        list = firebase.get(field, "")
         self.tableWidget.setRowCount(len(list))
-        row=0
+        row = 0
         for a in list:
             print(list[a]["version_num"])
-            self.tableWidget.setItem(row,0,QtWidgets.QTableWidgetItem(str(list[a]["version_num"])))
+            self.tableWidget.setItem(row, 0, QtWidgets.QTableWidgetItem(str(list[a]["version_num"])))
             self.tableWidget.setItem(row, 1, QtWidgets.QTableWidgetItem(str(list[a]["version_name"])))
             self.tableWidget.setItem(row, 2, QtWidgets.QTableWidgetItem(str(list[a]["date"])))
-            row=row+1
+            row = row + 1
+
+
+def addFilestab():
+    addFiles = AddFiles()
+    widget.addWidget(addFiles)
+    widget.setCurrentIndex(widget.currentIndex() + 1)
 
 
 def viewFilestab():
-    viewFiles= ViewFiles()
-    widget.addWidget(viewFiles)
-    viewFiles.viewloaddata()
+    mainwindow = MainWindow()
+    widget.addWidget(mainwindow)
     widget.setCurrentIndex(widget.currentIndex() + 1)
 
 
@@ -65,10 +139,11 @@ def my_exception_hook(exctype, value, traceback):
     sys._excepthook(exctype, value, traceback)
     sys.exit(1)
 
+
 # Set the exception hook to our wrapping function
 sys.excepthook = my_exception_hook
 
-#main
+# main
 app = QApplication(sys.argv)
 mainwindow = MainWindow()
 widget = QtWidgets.QStackedWidget()

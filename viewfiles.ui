@@ -40,8 +40,8 @@ border: 0px solid black;</string>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">alternate-background-color: #f5f7f8  ;
-background-color: #7d97a5 ;
+    <string notr="true">alternate-background-color: #dfe5e8   ;
+background-color: #becbd2   ;
   border: none;
   color: white;
   padding: 15px 32px;
@@ -55,10 +55,10 @@ border: 1px solid white;
 </string>
    </property>
    <property name="text">
-    <string>XML Warehouse</string>
+    <string>View Files</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_4">
+  <widget class="QPushButton" name="addFiles">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -83,7 +83,7 @@ border: 1px solid white;
 </string>
    </property>
    <property name="text">
-    <string>View Files</string>
+    <string>Add Files</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_3">
@@ -146,7 +146,7 @@ border: 1px solid white;
    <property name="geometry">
     <rect>
      <x>240</x>
-     <y>90</y>
+     <y>180</y>
      <width>191</width>
      <height>21</height>
     </rect>
@@ -164,7 +164,7 @@ font-family: helvetica;</string>
    <property name="geometry">
     <rect>
      <x>350</x>
-     <y>80</y>
+     <y>170</y>
      <width>291</width>
      <height>41</height>
     </rect>
@@ -183,10 +183,10 @@ font-size:14px;
   <widget class="QTableWidget" name="tableWidget">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>190</y>
-     <width>801</width>
-     <height>251</height>
+     <x>240</x>
+     <y>280</y>
+     <width>491</width>
+     <height>311</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -194,7 +194,7 @@ font-size:14px;
 align:center;</string>
    </property>
    <property name="columnCount">
-    <number>4</number>
+    <number>3</number>
    </property>
    <attribute name="horizontalHeaderDefaultSectionSize">
     <number>117</number>
@@ -204,7 +204,7 @@ align:center;</string>
    </attribute>
    <column>
     <property name="text">
-     <string>Version Number</string>
+     <string>Version Num</string>
     </property>
    </column>
    <column>
@@ -215,11 +215,6 @@ align:center;</string>
    <column>
     <property name="text">
      <string>Date Added</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Preview</string>
     </property>
    </column>
   </widget>
@@ -242,6 +237,53 @@ color: #435761;</string>
    </property>
    <property name="text">
     <string>&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>70</y>
+     <width>461</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-family:helvetica;
+font-size:35px;
+color: #435761  ;
+</string>
+   </property>
+   <property name="text">
+    <string> File Viewer</string>
+   </property>
+  </widget>
+  <widget class="QTextBrowser" name="previewBox">
+   <property name="geometry">
+    <rect>
+     <x>770</x>
+     <y>280</y>
+     <width>321</width>
+     <height>481</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="previewLabel">
+   <property name="geometry">
+    <rect>
+     <x>770</x>
+     <y>250</y>
+     <width>191</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #303e45 ;
+  font-size: 22px;
+font-family: helvetica;</string>
+   </property>
+   <property name="text">
+    <string>Preview</string>
    </property>
   </widget>
  </widget>
