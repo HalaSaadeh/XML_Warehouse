@@ -8,8 +8,19 @@ from PyQt5.QtWidgets import QDialog
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QFileDialog, QDialog, QTextEdit
 from firebase import firebase
-
+from xml_utilities import TwoTrees
+import pyrebase
 firebase = firebase.FirebaseApplication("https://xml-warehouse.firebaseio.com/", None)
+
+firebaseConfig={
+    "apiKey": "AIzaSyD6va2iN7YBZO_lgK3ph0YIhBsztl4E-cg",
+    "authDomain": "xml-warehouse.firebaseapp.com",
+    "databaseURL": "https://xml-warehouse.firebaseio.com",
+    "projectId": "xml-warehouse",
+    "storageBucket": "xml-warehouse.appspot.com",
+    "messagingSenderId": "346350351048",
+    "appId": "1:346350351048:web:0c9fa8af748a63384f6bfd"
+}
 
 
 class AddFiles(QDialog):
@@ -55,25 +66,41 @@ class AddFiles(QDialog):
         self.versionNum.setReadOnly(True)
 
     def addVersion(self):
-        if self.validateName and self.validateFileName and self.validateGroupName:
-            print("hi")
+        self.entername2.setVisible(False)
+        self.entername2.setVisible(False)
+        self.warning.setVisible(False)
+        validateFileName=self.validateFileName()
+        validateGroupName=self.validateGroupName()
+        validateName=self.validateName()
+        print(self.validateName and self.validateFileName and self.validateGroupName)
+        if (validateFileName and validateGroupName) and validateName:
+            path = self.uploadField.toPlainText()
+            print(len(self.name.toPlainText()))
+            newversion = TwoTrees("C:/Users/halas/OneDrive/Desktop/Test/SampleDoc (original).xml", path)
 
     def validateName(self):
-        if len(self.name.text()) == 0:
+        if len(self.name.toPlainText()) == int(0):
             self.entername1.setVisible(True)
             return False
         else:
             return True
 
     def validateFileName(self):
-        if len(self.uploadField.text()) == 0:
+        if len(self.uploadField.toPlainText()) == int(0):
             self.warning.setVisible(True)
             return False
         else:
             return True
 
     def validateGroupName(self):
-        print("hello")
+        if self.comboBox.currentText() == "New file group...":
+            if len(self.nameField.toPlainText()) == int(0):
+                self.entername2.setVisible(True)
+                return False
+            else:
+                return True
+        else:
+            return True
 
     def browsefile(self):
         fname = QFileDialog.getOpenFileName(self, 'Open file',
