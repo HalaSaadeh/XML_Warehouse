@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import QApplication, QFileDialog, QDialog, QTextEdit
 from firebase import firebase
 from xml_utilities import TwoTrees
 import pyrebase
+from getpass import getpass
 firebase = firebase.FirebaseApplication("https://xml-warehouse.firebaseio.com/", None)
 
 firebaseConfig={
@@ -22,6 +23,47 @@ firebaseConfig={
     "appId": "1:346350351048:web:0c9fa8af748a63384f6bfd"
 }
 
+fb= pyrebase.initialize_app(firebaseConfig)
+
+auth=fb.auth()
+
+
+class Login(QDialog):
+    def __init__(self):
+        super(Login, self).__init__()
+        loadUi("login.ui", self)
+        self.login.clicked.connect(self.loginFunc)
+        self.createAcc.clicked.connect(self.createAccount)
+        self.passField.setEchoMode(QtWidgets.QLineEdit.Password)
+
+    def loginFunc(self):
+        email=self.emailField.toPlainText()
+        password=self.passField.text()
+        login = auth.sign_in_with_email_and_password(email, password)
+        mainwindow = MainWindow()
+        widget.addWidget(mainwindow)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+    def createAccount(self):
+        createacc=CreateAcc()
+        widget.addWidget(createacc)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+class CreateAcc(QDialog):
+    def __init__(self):
+        super(CreateAcc, self).__init__()
+        loadUi("createacc.ui", self)
+        self.confirm.clicked.connect(self.confirmFunc)
+        self.passField.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.passField_2.setEchoMode(QtWidgets.QLineEdit.Password)
+
+    def confirmFunc(self):
+        email = self.emailField.toPlainText()
+        password = self.passField.text()
+        user = auth.create_user_with_email_and_password(email, password)
+        login = Login()
+        widget.addWidget(login)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
 
 class AddFiles(QDialog):
     def __init__(self):
@@ -172,7 +214,7 @@ sys.excepthook = my_exception_hook
 
 # main
 app = QApplication(sys.argv)
-mainwindow = MainWindow()
+mainwindow = Login()
 widget = QtWidgets.QStackedWidget()
 widget.addWidget(mainwindow)
 widget.setFixedHeight(850)
