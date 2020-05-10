@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QDialog
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QFileDialog, QDialog, QTextEdit
 from firebase import firebase
-from xml_utilities import TwoTrees
+from xml_utilities import TwoTrees,LDPair
 import pyrebase
 from getpass import getpass
 firebase = firebase.FirebaseApplication("https://xml-warehouse.firebaseio.com/", None)
@@ -114,12 +114,12 @@ class AddFiles(QDialog):
         validateFileName=self.validateFileName()
         validateGroupName=self.validateGroupName()
         validateName=self.validateName()
-        print(self.validateName and self.validateFileName and self.validateGroupName)
         if (validateFileName and validateGroupName) and validateName:
             path = self.uploadField.toPlainText()
-            print(len(self.name.toPlainText()))
             newversion = TwoTrees("C:/Users/halas/OneDrive/Desktop/Test/SampleDoc (original).xml", path)
-
+            newversion.computeES()
+            for a in newversion.tree2ld:
+                LDPair.printld(a)
     def validateName(self):
         if len(self.name.toPlainText()) == int(0):
             self.entername1.setVisible(True)
