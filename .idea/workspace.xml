@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="eb506003-a07e-442c-ad62-03f2350b9a0b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/xml_utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/xml_utilities.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -96,7 +95,7 @@
       <workItem from="1588798246472" duration="25000" />
       <workItem from="1589017446591" duration="15226000" />
       <workItem from="1589180284818" duration="2000" />
-      <workItem from="1589202813168" duration="4598000" />
+      <workItem from="1589202813168" duration="6867000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <created>1588252231412</created>
@@ -128,18 +127,7 @@
     <MESSAGE value="init commit" />
     <option name="LAST_COMMIT_MESSAGE" value="init commit" />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/xml_utilities.py</url>
-          <line>57</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/XML_Warehouse$mainwindow.coverage" NAME="mainwindow Coverage Results" MODIFIED="1589208188598" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/XML_Warehouse$mainwindow.coverage" NAME="mainwindow Coverage Results" MODIFIED="1589209878004" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
