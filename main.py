@@ -116,10 +116,9 @@ class AddFiles(QDialog):
         validateName=self.validateName()
         if (validateFileName and validateGroupName) and validateName:
             path = self.uploadField.toPlainText()
-            newversion = TwoTrees("C:/Users/halas/OneDrive/Desktop/Test/SampleDoc (original).xml", path)
-            newversion.computeES()
-            for a in newversion.tree2ld:
-                LDPair.printld(a)
+            newversion = TwoTrees("C:/Users/halas/OneDrive/Desktop/Test/books.xml", path)
+            print(newversion.computeES())
+
     def validateName(self):
         if len(self.name.toPlainText()) == int(0):
             self.entername1.setVisible(True)

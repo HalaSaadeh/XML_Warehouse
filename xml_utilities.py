@@ -1,13 +1,17 @@
+import sys
 from xml.etree.ElementTree import Element, SubElement, tostring
 import xml.etree.ElementTree as et
+
+import numpy as np
+
 
 class TwoTrees():
     path1=None
     path2=None
     tree1=""
     tree2=""
-    tree1ld=[]
-    tree2ld=[]
+    tree1ld=[""]
+    tree2ld=[""]
     def __init__(self, path1, path2):
         self.path1=path1
         self.path2=path2
@@ -40,7 +44,8 @@ class TwoTrees():
     def computeES(self):
         self.tree1ld=self.computeLD(self.tree1ld,self.tree1,None,0)
         self.tree2ld=self.computeLD(self.tree2ld,self.tree2,None,0)
-        #chawathe_matrix=self.computeTED()
+        chawathe_matrix=self.computeTED()
+        return chawathe_matrix
        # es=self.editScript(chawathe_matrix)
 
     def computeLD(self,t,root,parent,pos,level=0):
@@ -53,7 +58,31 @@ class TwoTrees():
             pos=pos+1
         return t
 
-    #def computeES(self):
+    def computeTED(self):
+        rows=len(self.tree1ld)
+        cols=len(self.tree2ld)
+        chmatrix=np.zeros((rows,cols))
+        for i in range(1,rows):
+            chmatrix[i,0]=chmatrix[i-1,0]+1
+        for j in range(1,cols):
+            chmatrix[0,j]=chmatrix[0,j-1]+1
+        for i in range(1,rows):
+            for j in range(1,cols):
+                insert = sys.maxsize
+                update = sys.maxsize
+                delete = sys.maxsize
+                if self.tree1ld[i].depth == self.tree2ld[j].depth:
+                    if self.tree1ld[i].label == self.tree2ld[j].label:
+                        update=chmatrix[i-1,j-1]
+                    else:
+                        update=chmatrix[i-1,j-1]+1
+                if j==cols-1 or (j<cols-1 and self.tree2ld[i+1].depth<=self.tree1ld[i].depth):
+                    delete=chmatrix[i-1,j]+1
+                if i==rows-1 or (i<rows-1 and self.tree1ld[i+1].depth<=self.tree2ld[j].depth):
+                    insert=chmatrix[i,j-1]+1
+                chmatrix[i,j]=min(insert,delete,update)
+        return chmatrix[rows-1,cols-1]
+
 
 class LDPair():
     label=""
