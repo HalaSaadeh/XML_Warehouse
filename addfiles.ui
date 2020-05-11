@@ -460,6 +460,39 @@ font-family: helvetica;</string>
     <string>Enter a name!</string>
    </property>
   </widget>
+  <widget class="QTextEdit" name="userField">
+   <property name="geometry">
+    <rect>
+     <x>870</x>
+     <y>430</y>
+     <width>181</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">selection-background-color: rgb(125, 151, 165);
+alternate-background-color: rgb(125, 151, 165);
+font-size: 15px;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="user">
+   <property name="geometry">
+    <rect>
+     <x>690</x>
+     <y>410</y>
+     <width>191</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #303e45 ;
+  font-size: 22px;
+font-family: helvetica;</string>
+   </property>
+   <property name="text">
+    <string>Version Name</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

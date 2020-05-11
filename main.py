@@ -26,10 +26,9 @@ firebaseConfig={
 }
 
 fb= pyrebase.initialize_app(firebaseConfig)
-
 auth=fb.auth()
 storage=fb.storage()
-
+global login
 #storage.child("/books/books3.xml").put("C:/Users/halas/OneDrive/Desktop/Test/books3.xml")
 #storage.child("/books/books3.xml").download("C:/Users/halas/OneDrive/Desktop/Test/newfile.xml")
 class Login(QDialog):
@@ -41,6 +40,7 @@ class Login(QDialog):
         self.passField.setEchoMode(QtWidgets.QLineEdit.Password)
 
     def loginFunc(self):
+        global login
         email=self.emailField.toPlainText()
         password=self.passField.text()
         login = auth.sign_in_with_email_and_password(email, password)
@@ -84,6 +84,9 @@ class AddFiles(QDialog):
         self.dateEdit.setDate(QDate.currentDate())
         self.browse.clicked.connect(self.browsefile)
         self.add.clicked.connect(self.addVersion)
+        email=auth.get_account_info(login['idToken'])['users'][0]['email']
+        self.userField.setText(email.split('@')[0])
+        self.userField.setReadOnly(True)
 
     def viewloaddata(self):
         list = firebase.get("/", "")
