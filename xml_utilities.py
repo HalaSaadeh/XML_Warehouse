@@ -1,4 +1,5 @@
 import sys
+import urllib
 from xml.etree.ElementTree import Element, SubElement, tostring
 import xml.etree.ElementTree as et
 
@@ -17,13 +18,13 @@ class TwoTrees():
     def __init__(self, path1, path2):
         self.path1=path1
         self.path2=path2
-        self.tree1= self.docpreprocess(path1)
-        self.tree2=self.docpreprocess(path2)
+        self.tree1= self.docpreprocess(path1,False)
+        self.tree2=self.docpreprocess(path2,True)
         self.tree1ld.append(LDPair("0",-1,None,0))
         self.tree2ld.append(LDPair("0", -1, None, 0))
         self.tree1ld = self.computeLD(self.tree1ld, self.tree1, None, 0)
         self.tree2ld = self.computeLD(self.tree2ld, self.tree2, None, 0)
-    def docpreprocess(self,path):
+    def docpreprocess(self,path,n):
         def prep(t):
             if t is None:
                 return None
@@ -40,9 +41,13 @@ class TwoTrees():
                     c = SubElement(newtree, "( " + word)
             return newtree
 
-        v = open(path, "r")
-        f = v.read()
-        t = et.fromstring(f, parser=et.XMLParser(encoding="unicode"))
+        if n:
+            v = open(path, "r")
+            f = v.read()
+        else:
+            f= urllib.request.urlopen(path).read()
+
+        t = et.fromstring(f)
         tree=prep(t)
         return tree
 

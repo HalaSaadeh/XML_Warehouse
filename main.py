@@ -11,6 +11,7 @@ from firebase import firebase
 from xml_utilities import TwoTrees,LDPair,getParent
 import pyrebase
 from getpass import getpass
+from firebase_admin import db
 
 firebase = firebase.FirebaseApplication("https://xml-warehouse.firebaseio.com/", None)
 
@@ -27,8 +28,10 @@ firebaseConfig={
 fb= pyrebase.initialize_app(firebaseConfig)
 
 auth=fb.auth()
+storage=fb.storage()
 
-
+#storage.child("/books/books3.xml").put("C:/Users/halas/OneDrive/Desktop/Test/books3.xml")
+#storage.child("/books/books3.xml").download("C:/Users/halas/OneDrive/Desktop/Test/newfile.xml")
 class Login(QDialog):
     def __init__(self):
         super(Login, self).__init__()
@@ -116,9 +119,12 @@ class AddFiles(QDialog):
         validateGroupName=self.validateGroupName()
         validateName=self.validateName()
         if (validateFileName and validateGroupName) and validateName:
+            result = firebase.get('/'+self.comboBox.currentText(), '')
             path = self.uploadField.toPlainText()
-            newversion = TwoTrees("C:/Users/halas/OneDrive/Desktop/Test/SampleDoc (original).xml", path)
+            newversion = TwoTrees(storage.child(result["latestfileurl"]).get_url(None), path)
             newversion.computeES()
+            #take this es
+            #put it in db w+ meta data
 
     def validateName(self):
         if len(self.name.toPlainText()) == int(0):
