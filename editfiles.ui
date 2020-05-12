@@ -69,7 +69,7 @@ border: 1px solid white;
    </property>
    <property name="styleSheet">
     <string notr="true">
-background-color: #becbd2  ;
+background-color: #7d97a5 ;
   border: none;
   color: white;
   padding: 15px 32px;
@@ -157,7 +157,7 @@ font-size:30px;
 color: #435761  ;</string>
    </property>
    <property name="text">
-    <string>Add new version</string>
+    <string>Edit File</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
@@ -198,77 +198,11 @@ font-size:14px;
     </property>
    </item>
   </widget>
-  <widget class="QLabel" name="groupName">
-   <property name="geometry">
-    <rect>
-     <x>780</x>
-     <y>170</y>
-     <width>191</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: #303e45 ;
-  font-size: 22px;
-font-family: helvetica;</string>
-   </property>
-   <property name="text">
-    <string>Group Name</string>
-   </property>
-  </widget>
-  <widget class="QTextEdit" name="nameField">
-   <property name="geometry">
-    <rect>
-     <x>910</x>
-     <y>180</y>
-     <width>181</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">selection-background-color: rgb(125, 151, 165);
-alternate-background-color: rgb(125, 151, 165);
-font-size: 20px;</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_4">
-   <property name="geometry">
-    <rect>
-     <x>270</x>
-     <y>250</y>
-     <width>191</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: #303e45 ;
-  font-size: 22px;
-font-family: helvetica;</string>
-   </property>
-   <property name="text">
-    <string>Upload File</string>
-   </property>
-  </widget>
-  <widget class="QTextEdit" name="uploadField">
-   <property name="geometry">
-    <rect>
-     <x>450</x>
-     <y>270</y>
-     <width>491</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">selection-background-color: rgb(125, 151, 165);
-alternate-background-color: rgb(125, 151, 165);
-font-size: 15px;</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="label_5">
    <property name="geometry">
     <rect>
      <x>270</x>
-     <y>330</y>
+     <y>240</y>
      <width>191</width>
      <height>71</height>
     </rect>
@@ -286,7 +220,7 @@ font-family: helvetica;</string>
    <property name="geometry">
     <rect>
      <x>450</x>
-     <y>350</y>
+     <y>260</y>
      <width>181</width>
      <height>31</height>
     </rect>
@@ -301,7 +235,7 @@ font-size: 15px;</string>
    <property name="geometry">
     <rect>
      <x>690</x>
-     <y>330</y>
+     <y>240</y>
      <width>191</width>
      <height>71</height>
     </rect>
@@ -319,7 +253,7 @@ font-family: helvetica;</string>
    <property name="geometry">
     <rect>
      <x>870</x>
-     <y>350</y>
+     <y>260</y>
      <width>51</width>
      <height>31</height>
     </rect>
@@ -330,12 +264,12 @@ alternate-background-color: rgb(125, 151, 165);
 font-size: 15px;</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="add">
+  <widget class="QPushButton" name="commit">
    <property name="geometry">
     <rect>
-     <x>870</x>
-     <y>500</y>
-     <width>141</width>
+     <x>900</x>
+     <y>770</y>
+     <width>191</width>
      <height>41</height>
     </rect>
    </property>
@@ -343,14 +277,14 @@ font-size: 15px;</string>
     <string notr="true">font-size: 20px;</string>
    </property>
    <property name="text">
-    <string>Add Version</string>
+    <string>Commit Changes</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_7">
    <property name="geometry">
     <rect>
      <x>270</x>
-     <y>410</y>
+     <y>320</y>
      <width>191</width>
      <height>71</height>
     </rect>
@@ -368,7 +302,7 @@ font-family: helvetica;</string>
    <property name="geometry">
     <rect>
      <x>450</x>
-     <y>430</y>
+     <y>340</y>
      <width>181</width>
      <height>31</height>
     </rect>
@@ -377,77 +311,11 @@ font-family: helvetica;</string>
     <string notr="true">font-size:20px;</string>
    </property>
   </widget>
-  <widget class="QLabel" name="versionSuccess">
-   <property name="geometry">
-    <rect>
-     <x>680</x>
-     <y>510</y>
-     <width>181</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font-size:15px;</string>
-   </property>
-   <property name="text">
-    <string>Version added successfully! </string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="browse">
-   <property name="geometry">
-    <rect>
-     <x>950</x>
-     <y>270</y>
-     <width>131</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font-size: 15px;</string>
-   </property>
-   <property name="text">
-    <string>Browse</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="warning">
-   <property name="geometry">
-    <rect>
-     <x>830</x>
-     <y>300</y>
-     <width>111</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color:rgb(255, 0, 0)
-</string>
-   </property>
-   <property name="text">
-    <string>Please select a file!</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="entername1">
    <property name="geometry">
     <rect>
      <x>550</x>
-     <y>380</y>
-     <width>111</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color:rgb(255, 0, 0)
-</string>
-   </property>
-   <property name="text">
-    <string>Enter a name!</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="entername2">
-   <property name="geometry">
-    <rect>
-     <x>1010</x>
-     <y>220</y>
+     <y>290</y>
      <width>111</width>
      <height>21</height>
     </rect>
@@ -464,7 +332,7 @@ font-family: helvetica;</string>
    <property name="geometry">
     <rect>
      <x>870</x>
-     <y>430</y>
+     <y>340</y>
      <width>181</width>
      <height>31</height>
     </rect>
@@ -479,7 +347,7 @@ font-size: 15px;</string>
    <property name="geometry">
     <rect>
      <x>690</x>
-     <y>410</y>
+     <y>320</y>
      <width>191</width>
      <height>71</height>
     </rect>
@@ -504,7 +372,7 @@ font-family: helvetica;</string>
    </property>
    <property name="styleSheet">
     <string notr="true">
-background-color: #7d97a5 ;
+background-color: #becbd2  ;
   border: none;
   color: white;
   padding: 15px 32px;
@@ -519,6 +387,16 @@ border: 1px solid white;
    </property>
    <property name="text">
     <string>Edit File</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="textEdit">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>400</y>
+     <width>821</width>
+     <height>351</height>
+    </rect>
    </property>
   </widget>
  </widget>

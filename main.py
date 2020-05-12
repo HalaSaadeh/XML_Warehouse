@@ -1,6 +1,9 @@
 import sys
+import urllib
+
 import PyQt5.QtCore
 import PyQt5.QtWidgets
+import xml.dom.minidom
 from PyQt5.QtCore import QDate
 from PyQt5.uic import loadUi
 import PyQt5
@@ -28,9 +31,10 @@ firebaseConfig={
 fb= pyrebase.initialize_app(firebaseConfig)
 auth=fb.auth()
 storage=fb.storage()
+db=fb.database()
+
 global login
-#storage.child("/books/books3.xml").put("C:/Users/halas/OneDrive/Desktop/Test/books3.xml")
-#storage.child("/books/books3.xml").download("C:/Users/halas/OneDrive/Desktop/Test/newfile.xml")
+
 class Login(QDialog):
     def __init__(self):
         super(Login, self).__init__()
@@ -74,6 +78,7 @@ class AddFiles(QDialog):
         super(AddFiles, self).__init__()
         loadUi("addfiles.ui", self)
         self.viewFiles.clicked.connect(viewFilestab)
+        self.editFile.clicked.connect(editFiletab)
         self.viewloaddata()
         self.groupName.setVisible(False)
         self.nameField.setVisible(False)
@@ -122,20 +127,29 @@ class AddFiles(QDialog):
         validateGroupName=self.validateGroupName()
         validateName=self.validateName()
         if (validateFileName and validateGroupName) and validateName:
-            result = firebase.get('/'+self.comboBox.currentText(), '')
-            path = self.uploadField.toPlainText()
-            newversion = TwoTrees(storage.child(result["latestfileurl"]).get_url(None), path)
-            newversion.computeES()
-            cloudfilename='/' + self.comboBox.currentText() + '/'+self.versionNum.toPlainText()+".xml"
-            cloudfilename2='/' + self.comboBox.currentText() + '/'+str(int(self.versionNum.toPlainText())-1)+".xml"
-            storage.child(cloudfilename2).put("editscriptfw.xml")
-            storage.child(cloudfilename).put(path)
-            data={"date": str(self.dateEdit.date().toPyDate()), "url": cloudfilename, 'username': self.userField.toPlainText(),'version_name':self.name.toPlainText(),
-                                'version_num':self.versionNum.toPlainText()}
-            puturl='/'+self.comboBox.currentText()+'/versions'
-            latesturl='/'+self.comboBox.currentText()+'/latestfileurl'
-            firebase.post(puturl, data)
-            firebase.post(latesturl,cloudfilename)
+            if self.comboBox.currentText() == "New file group...":
+                path = self.uploadField.toPlainText()
+                cloudfilename = '/' + self.nameField.toPlainText() + '/1.xml'
+                storage.child(cloudfilename).put(path)
+                data = { self.nameField.toPlainText() : {"latestfileurl": cloudfilename}}
+                db.update(data)
+                newdata={"date": str(self.dateEdit.date().toPyDate()), "url": cloudfilename, 'username': self.userField.toPlainText(),'version_name':self.name.toPlainText(), 'version_num': '1'}
+                db.child(self.nameField.toPlainText()).child("versions").update(newdata)
+            else:
+                result = firebase.get('/'+self.comboBox.currentText(), '')
+                path = self.uploadField.toPlainText()
+                newversion = TwoTrees(storage.child(result["latestfileurl"]).get_url(None), path)
+                newversion.computeES()
+                cloudfilename='/' + self.comboBox.currentText() + '/'+self.versionNum.toPlainText()+".xml"
+                cloudfilename2='/' + self.comboBox.currentText() + '/'+str(int(self.versionNum.toPlainText())-1)+".xml"
+                storage.child(cloudfilename2).put("editscriptfw.xml")
+                storage.child(cloudfilename).put(path)
+                data={"date": str(self.dateEdit.date().toPyDate()), "url": cloudfilename, 'username': self.userField.toPlainText(),'version_name':self.name.toPlainText(),
+                                    'version_num':self.versionNum.toPlainText()}
+                puturl='/'+self.comboBox.currentText()+'/versions'
+                latesturl='/'+self.comboBox.currentText()+'/latestfileurl'
+                firebase.post(puturl, data)
+                db.child(self.comboBox.currentText()).update({"latestfileurl": cloudfilename})
 
     def validateName(self):
         if len(self.name.toPlainText()) == int(0):
@@ -176,6 +190,7 @@ class MainWindow(QDialog):
         self.tableWidget.setColumnWidth(2, 150)
         self.viewloaddata()
         self.addFiles.clicked.connect(addFilestab)
+        self.editFile.clicked.connect(editFiletab)
         self.previewBox.setVisible(False)
         self.previewLabel.setVisible(False)
 
@@ -197,6 +212,76 @@ class MainWindow(QDialog):
             self.tableWidget.setItem(row, 1, QtWidgets.QTableWidgetItem(str(list[a]["version_name"])))
             self.tableWidget.setItem(row, 2, QtWidgets.QTableWidgetItem(str(list[a]["date"])))
             row = row + 1
+
+class EditFile(QDialog):
+    p=""
+    def __init__(self):
+        super(EditFile, self).__init__()
+        loadUi("editfiles.ui", self)
+        self.viewFiles.clicked.connect(viewFilestab)
+        self.addFiles.clicked.connect(addFilestab)
+        email = auth.get_account_info(login['idToken'])['users'][0]['email']
+        self.userField.setText(email.split('@')[0])
+        self.userField.setReadOnly(True)
+        self.dateEdit.setDate(QDate.currentDate())
+        self.viewloaddata()
+        self.entername1.setVisible(False)
+
+    def viewloaddata(self):
+        list = firebase.get("/", "")
+        for a in list:
+            self.comboBox.addItem(a)
+        self.comboBox.currentIndexChanged.connect(self.updateFields)
+
+    def updateFields(self):
+        self.name.setText("")
+        field = '/' + self.comboBox.currentText() + "/versions"
+        list = firebase.get(field, "")
+        self.versionNum.setText(str(len(list) + 1))
+        self.versionNum.setReadOnly(True)
+        self.updateFile()
+
+    def updateFile(self):
+        latesturl = '/' + self.comboBox.currentText() + '/latestfileurl'
+        url = firebase.get(latesturl, "")
+        print(url)
+        path=storage.child(url).get_url(None)
+        print(path)
+        f = urllib.request.urlopen(path).read()
+        fa=xml.dom.minidom.parseString(f)
+        self.p=fa.toprettyxml()
+        self.textEdit.setText(self.p)
+        self.commit.clicked.connect(self.commitchanges)
+
+    def commitchanges(self):
+        if len(self.textEdit.toPlainText())!=0:
+            if self.textEdit.toPlainText()!=self.p:
+                result = firebase.get('/' + self.comboBox.currentText(), '')
+                f = open("newfile.xml", "w")
+                f.write(self.textEdit.toPlainText())
+                f.close()
+                path = "newfile.xml"
+                newversion = TwoTrees(storage.child(result["latestfileurl"]).get_url(None), path)
+                newversion.computeES()
+                cloudfilename = '/' + self.comboBox.currentText() + '/' + self.versionNum.toPlainText() + ".xml"
+                cloudfilename2 = '/' + self.comboBox.currentText() + '/' + str(
+                    int(self.versionNum.toPlainText()) - 1) + ".xml"
+                storage.child(cloudfilename2).put("editscriptfw.xml")
+                storage.child(cloudfilename).put(path)
+                data = {"date": str(self.dateEdit.date().toPyDate()), "url": cloudfilename,
+                        'username': self.userField.toPlainText(), 'version_name': self.name.toPlainText(),
+                        'version_num': self.versionNum.toPlainText()}
+                puturl = '/' + self.comboBox.currentText() + '/versions'
+                latesturl = '/' + self.comboBox.currentText() + '/latestfileurl'
+                firebase.post(puturl, data)
+                db.child(self.comboBox.currentText()).update({"latestfileurl": cloudfilename})
+
+
+
+def editFiletab():
+    editfile=EditFile()
+    widget.addWidget(editfile)
+    widget.setCurrentIndex(widget.currentIndex()+1)
 
 
 def addFilestab():
