@@ -69,7 +69,7 @@ border: 1px solid white;
    </property>
    <property name="styleSheet">
     <string notr="true">
-background-color: #becbd2  ;
+background-color: #7d97a5 ;
   border: none;
   color: white;
   padding: 15px 32px;
@@ -97,8 +97,7 @@ border: 1px solid white;
    </property>
    <property name="styleSheet">
     <string notr="true">
-background-color: #7d97a5 ;
-  border: none;
+background-color: #becbd2  ;  border: none;
   color: white;
   padding: 15px 32px;
   text-align: center;
@@ -146,9 +145,9 @@ border: 1px solid white;
    <property name="geometry">
     <rect>
      <x>240</x>
-     <y>80</y>
+     <y>70</y>
      <width>341</width>
-     <height>31</height>
+     <height>51</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -157,15 +156,15 @@ font-size:30px;
 color: #435761  ;</string>
    </property>
    <property name="text">
-    <string>Add new version</string>
+    <string>Query Changes</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>270</x>
+     <x>380</x>
      <y>170</y>
-     <width>191</width>
+     <width>221</width>
      <height>61</height>
     </rect>
    </property>
@@ -175,13 +174,13 @@ color: #435761  ;</string>
 font-family: helvetica;</string>
    </property>
    <property name="text">
-    <string>Select File Group</string>
+    <string>Select Querying Mode</string>
    </property>
   </widget>
   <widget class="QComboBox" name="comboBox">
    <property name="geometry">
     <rect>
-     <x>450</x>
+     <x>610</x>
      <y>180</y>
      <width>291</width>
      <height>41</height>
@@ -197,46 +196,28 @@ font-size:14px;
      <string/>
     </property>
    </item>
+   <item>
+    <property name="text">
+     <string>Version Num</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Version Name</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Date</string>
+    </property>
+   </item>
   </widget>
-  <widget class="QLabel" name="groupName">
+  <widget class="QLabel" name="fromvname">
    <property name="geometry">
     <rect>
-     <x>780</x>
-     <y>170</y>
-     <width>191</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: #303e45 ;
-  font-size: 22px;
-font-family: helvetica;</string>
-   </property>
-   <property name="text">
-    <string>Group Name</string>
-   </property>
-  </widget>
-  <widget class="QTextEdit" name="nameField">
-   <property name="geometry">
-    <rect>
-     <x>910</x>
-     <y>180</y>
-     <width>181</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">selection-background-color: rgb(125, 151, 165);
-alternate-background-color: rgb(125, 151, 165);
-font-size: 20px;</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_4">
-   <property name="geometry">
-    <rect>
-     <x>270</x>
-     <y>250</y>
-     <width>191</width>
+     <x>240</x>
+     <y>240</y>
+     <width>201</width>
      <height>71</height>
     </rect>
    </property>
@@ -246,47 +227,14 @@ font-size: 20px;</string>
 font-family: helvetica;</string>
    </property>
    <property name="text">
-    <string>Upload File</string>
+    <string>From: Version Name</string>
    </property>
   </widget>
-  <widget class="QTextEdit" name="uploadField">
+  <widget class="QTextEdit" name="vnamefrom">
    <property name="geometry">
     <rect>
      <x>450</x>
-     <y>270</y>
-     <width>491</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">selection-background-color: rgb(125, 151, 165);
-alternate-background-color: rgb(125, 151, 165);
-font-size: 15px;</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_5">
-   <property name="geometry">
-    <rect>
-     <x>270</x>
-     <y>330</y>
-     <width>191</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: #303e45 ;
-  font-size: 22px;
-font-family: helvetica;</string>
-   </property>
-   <property name="text">
-    <string>Version Name</string>
-   </property>
-  </widget>
-  <widget class="QTextEdit" name="name">
-   <property name="geometry">
-    <rect>
-     <x>450</x>
-     <y>350</y>
+     <y>260</y>
      <width>181</width>
      <height>31</height>
     </rect>
@@ -297,12 +245,12 @@ alternate-background-color: rgb(125, 151, 165);
 font-size: 15px;</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_6">
+  <widget class="QLabel" name="fromvnum">
    <property name="geometry">
     <rect>
-     <x>690</x>
-     <y>330</y>
-     <width>191</width>
+     <x>240</x>
+     <y>240</y>
+     <width>271</width>
      <height>71</height>
     </rect>
    </property>
@@ -312,30 +260,15 @@ font-size: 15px;</string>
 font-family: helvetica;</string>
    </property>
    <property name="text">
-    <string>Version Number</string>
+    <string>From: Version Number</string>
    </property>
   </widget>
-  <widget class="QTextEdit" name="versionNum">
+  <widget class="QPushButton" name="query">
    <property name="geometry">
     <rect>
-     <x>870</x>
-     <y>350</y>
-     <width>51</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">selection-background-color: rgb(125, 151, 165);
-alternate-background-color: rgb(125, 151, 165);
-font-size: 15px;</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="add">
-   <property name="geometry">
-    <rect>
-     <x>870</x>
-     <y>500</y>
-     <width>141</width>
+     <x>900</x>
+     <y>770</y>
+     <width>191</width>
      <height>41</height>
     </rect>
    </property>
@@ -343,14 +276,14 @@ font-size: 15px;</string>
     <string notr="true">font-size: 20px;</string>
    </property>
    <property name="text">
-    <string>Add Version</string>
+    <string>Query</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_7">
+  <widget class="QLabel" name="fromDate">
    <property name="geometry">
     <rect>
      <x>270</x>
-     <y>410</y>
+     <y>240</y>
      <width>191</width>
      <height>71</height>
     </rect>
@@ -361,136 +294,20 @@ font-size: 15px;</string>
 font-family: helvetica;</string>
    </property>
    <property name="text">
-    <string>Date </string>
+    <string>From: Date </string>
    </property>
   </widget>
-  <widget class="QDateEdit" name="dateEdit">
+  <widget class="QDateEdit" name="dateFrom">
    <property name="geometry">
     <rect>
      <x>450</x>
-     <y>430</y>
+     <y>260</y>
      <width>181</width>
      <height>31</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">font-size:20px;</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="versionSuccess">
-   <property name="geometry">
-    <rect>
-     <x>680</x>
-     <y>510</y>
-     <width>181</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font-size:15px;</string>
-   </property>
-   <property name="text">
-    <string>Version added successfully! </string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="browse">
-   <property name="geometry">
-    <rect>
-     <x>950</x>
-     <y>270</y>
-     <width>131</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font-size: 15px;</string>
-   </property>
-   <property name="text">
-    <string>Browse</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="warning">
-   <property name="geometry">
-    <rect>
-     <x>830</x>
-     <y>300</y>
-     <width>111</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color:rgb(255, 0, 0)
-</string>
-   </property>
-   <property name="text">
-    <string>Please select a file!</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="entername1">
-   <property name="geometry">
-    <rect>
-     <x>550</x>
-     <y>380</y>
-     <width>111</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color:rgb(255, 0, 0)
-</string>
-   </property>
-   <property name="text">
-    <string>Enter a name!</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="entername2">
-   <property name="geometry">
-    <rect>
-     <x>1010</x>
-     <y>220</y>
-     <width>111</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color:rgb(255, 0, 0)
-</string>
-   </property>
-   <property name="text">
-    <string>Enter a name!</string>
-   </property>
-  </widget>
-  <widget class="QTextEdit" name="userField">
-   <property name="geometry">
-    <rect>
-     <x>870</x>
-     <y>430</y>
-     <width>181</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">selection-background-color: rgb(125, 151, 165);
-alternate-background-color: rgb(125, 151, 165);
-font-size: 15px;</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="user">
-   <property name="geometry">
-    <rect>
-     <x>690</x>
-     <y>410</y>
-     <width>191</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: #303e45 ;
-  font-size: 22px;
-font-family: helvetica;</string>
-   </property>
-   <property name="text">
-    <string>User Name</string>
    </property>
   </widget>
   <widget class="QPushButton" name="editFile">
@@ -505,6 +322,7 @@ font-family: helvetica;</string>
    <property name="styleSheet">
     <string notr="true">
 background-color: #7d97a5 ;
+
   border: none;
   color: white;
   padding: 15px 32px;
@@ -519,6 +337,223 @@ border: 1px solid white;
    </property>
    <property name="text">
     <string>Edit File</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="textEdit">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>400</y>
+     <width>671</width>
+     <height>351</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QDateEdit" name="dateTo">
+   <property name="geometry">
+    <rect>
+     <x>870</x>
+     <y>260</y>
+     <width>181</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-size:20px;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="toDate">
+   <property name="geometry">
+    <rect>
+     <x>710</x>
+     <y>240</y>
+     <width>191</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #303e45 ;
+  font-size: 22px;
+font-family: helvetica;</string>
+   </property>
+   <property name="text">
+    <string>To: Date </string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="vnameto">
+   <property name="geometry">
+    <rect>
+     <x>870</x>
+     <y>260</y>
+     <width>181</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">selection-background-color: rgb(125, 151, 165);
+alternate-background-color: rgb(125, 151, 165);
+font-size: 15px;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="tovname">
+   <property name="geometry">
+    <rect>
+     <x>660</x>
+     <y>240</y>
+     <width>201</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #303e45 ;
+  font-size: 22px;
+font-family: helvetica;</string>
+   </property>
+   <property name="text">
+    <string>To: Version Name</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="tovnum">
+   <property name="geometry">
+    <rect>
+     <x>660</x>
+     <y>240</y>
+     <width>271</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #303e45 ;
+  font-size: 22px;
+font-family: helvetica;</string>
+   </property>
+   <property name="text">
+    <string>To: Version Number</string>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="vnumfrom">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>260</y>
+     <width>51</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-size:16px;</string>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="vnumto">
+   <property name="geometry">
+    <rect>
+     <x>890</x>
+     <y>260</y>
+     <width>51</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-size:16px;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>360</x>
+     <y>320</y>
+     <width>101</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #303e45 ;
+  font-size: 22px;
+font-family: helvetica;</string>
+   </property>
+   <property name="text">
+    <string>Show:</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>330</y>
+     <width>141</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-size:18px;</string>
+   </property>
+   <property name="text">
+    <string>Insertions</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_2">
+   <property name="geometry">
+    <rect>
+     <x>680</x>
+     <y>330</y>
+     <width>141</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-size:18px;</string>
+   </property>
+   <property name="text">
+    <string>Deletions</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_3">
+   <property name="geometry">
+    <rect>
+     <x>840</x>
+     <y>330</y>
+     <width>141</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-size:18px;</string>
+   </property>
+   <property name="text">
+    <string>Updates</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="filegrp">
+   <property name="geometry">
+    <rect>
+     <x>610</x>
+     <y>130</y>
+     <width>191</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string/>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>430</x>
+     <y>120</y>
+     <width>171</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #303e45 ;
+  font-size: 22px;
+font-family: helvetica;</string>
+   </property>
+   <property name="text">
+    <string>Select File Group</string>
    </property>
   </widget>
  </widget>

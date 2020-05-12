@@ -86,7 +86,7 @@ border: 1px solid white;
     <string>Add Files</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_3">
+  <widget class="QPushButton" name="queryChanges">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -111,10 +111,10 @@ border: 1px solid white;
 </string>
    </property>
    <property name="text">
-    <string>Query the Past</string>
+    <string>Query Changes</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="queryPast">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -139,7 +139,7 @@ border: 1px solid white;
 </string>
    </property>
    <property name="text">
-    <string>Query Changes</string>
+    <string>Query the Past</string>
    </property>
   </widget>
   <widget class="QLabel" name="label">
