@@ -1,1 +1,1 @@
-<editscript><delete><indexParent indexParent="8" /><label label="( Developer's" /><parent parent="catalog.book.title." /><pos pos="1" /></delete><update><indexParent indexParent="13" /><initial initial="( 44.9" /><new new="( 44.8" /><parent parent="catalog.book." /><pos pos="0" /></update></editscript>
+<editscript><update><indexParent indexParent="3" /><initial initial="12345" /><new new="123345" /><parent parent="LAU.Course.@ id." /><pos pos="0" /></update></editscript>

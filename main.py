@@ -112,6 +112,7 @@ class AddFiles(QDialog):
         else:
             field = '/' + self.comboBox.currentText() + "/versions"
             list = firebase.get(field, "")
+            print(list)
             self.versionNum.setText(str(len(list) + 1))
             self.versionNum.setReadOnly(True)
 
@@ -134,9 +135,10 @@ class AddFiles(QDialog):
                 cloudfilename = '/' + self.nameField.toPlainText() + '/1.xml'
                 storage.child(cloudfilename).put(path)
                 data = { self.nameField.toPlainText() : {"latestfileurl": cloudfilename}}
+                puturl='/'+self.nameField.toPlainText()+'/versions'
                 db.update(data)
                 newdata={"date": str(self.dateEdit.date().toPyDate()), "url": cloudfilename, 'username': self.userField.toPlainText(),'version_name':self.name.toPlainText(), 'version_num': '1'}
-                db.child(self.nameField.toPlainText()).child("versions").update(newdata)
+                firebase.post(puturl, newdata)
             else:
                 result = firebase.get('/'+self.comboBox.currentText(), '')
                 path = self.uploadField.toPlainText()
@@ -260,18 +262,21 @@ class EditFile(QDialog):
     def commitchanges(self):
         if len(self.textEdit.toPlainText())!=0:
             if self.textEdit.toPlainText()!=self.p:
-                result = firebase.get('/' + self.comboBox.currentText(), '')
                 f = open("newfile.xml", "w")
                 f.write(self.textEdit.toPlainText())
                 f.close()
-                path = "newfile.xml"
-                newversion = TwoTrees(storage.child(result["latestfileurl"]).get_url(None), path)
+                path1 = "newfile.xml"
+                latesturl = '/' + self.comboBox.currentText() + '/latestfileurl'
+                url = firebase.get(latesturl, "")
+                print(url)
+                path = storage.child(url).get_url(None)
+                newversion = TwoTrees(path, path1)
                 newversion.computeES()
                 cloudfilename = '/' + self.comboBox.currentText() + '/' + self.versionNum.toPlainText() + ".xml"
                 cloudfilename2 = '/' + self.comboBox.currentText() + '/' + str(
                     int(self.versionNum.toPlainText()) - 1) + ".xml"
                 storage.child(cloudfilename2).put("editscriptfw.xml")
-                storage.child(cloudfilename).put(path)
+                storage.child(cloudfilename).put(path1)
                 data = {"date": str(self.dateEdit.date().toPyDate()), "url": cloudfilename,
                         'username': self.userField.toPlainText(), 'version_name': self.name.toPlainText(),
                         'version_num': self.versionNum.toPlainText()}
@@ -300,6 +305,53 @@ class QueryChanges(QDialog):
         self.dateFrom.setDate(QDate.currentDate())
         self.comboBox.currentIndexChanged.connect(self.updateFields)
         self.viewloaddata()
+        self.query.clicked.connect(self.querychanges)
+
+    def querychanges(self):
+        versions = db.child(self.filegrp.currentText()).child("versions").get()
+        if self.comboBox.currentText()=="Version Num":
+            self.queryNext(self.vnumfrom.value(),self.vnumto.value())
+        if self.comboBox.currentText()=="Version Name":
+            for version in versions.each():
+                if version.val()["version_name"]==str(self.vnamefrom.currentText()):
+                    numfrom=version.val()["version_num"]
+                if version.val()["version_name"]==str(self.vnameto.currentText()):
+                    numto=version.val()["version_num"]
+            self.queryNext(int(numfrom), int(numto))
+        if self.comboBox.currentText()=="Date":
+            numfrom=-1
+            numto=-1
+            for version in versions.each():
+                if version.val()["date"] == str(self.dateFrom.date()):
+                    numfrom = version.val()["version_num"]
+                    break
+            for version in versions.each():
+                if version.val()["date"]==str(self.dateTo.date()):
+                    numto=version.val()["version_num"]
+            print(numfrom,numto)
+            self.queryNext(int(numfrom), int(numto))
+
+    def queryNext(self,num1,num2):
+        if num2-num1<0:
+            return
+        elif num2-num1==0:
+            return
+        elif num2-num1==1:
+            versions = db.child(self.filegrp.currentText()).child("versions").get()
+            for version in versions.each():
+                print(version.val())
+                if version.val()["version_num"] == str(num1):
+                    url = version.val()["url"]
+                    path = storage.child(url).get_url(None)
+                    f = urllib.request.urlopen(path).read()
+                    fa = xml.dom.minidom.parseString(f)
+                    self.printResults(fa)
+
+        else:
+            print("aggregate es")
+
+    def printResults(self,es):
+        self.textEdit.setText(es)
 
     def updateFields(self):
         if self.comboBox.currentText()=="Version Num":
@@ -354,7 +406,13 @@ class QueryChanges(QDialog):
             field = '/' + self.filegrp.currentText() + "/versions"
             list = firebase.get(field, "")
             self.vnumto.setValue(int(len(list)))
-            self.vnumfrom.setValue(0)
+            self.vnumfrom.setValue(1)
+        if self.comboBox.currentText()=="Version Name":
+            versions = db.child(self.filegrp.currentText()).child("versions").get()
+            for version in versions.each():
+                self.vnamefrom.addItem(version.val()['version_name'])
+                self.vnameto.addItem(version.val()['version_name'])
+
 
 def queryChangestab():
     querychanges=QueryChanges()
