@@ -126,8 +126,14 @@ class AddFiles(QDialog):
             path = self.uploadField.toPlainText()
             newversion = TwoTrees(storage.child(result["latestfileurl"]).get_url(None), path)
             newversion.computeES()
-            #take this es
-            #put it in db w+ meta data
+            cloudfilename='/' + self.comboBox.currentText() + '/'+self.versionNum.toPlainText()
+            latest = '/' + self.comboBox.currentText() + '/latest.xml'
+    #        storage.child(cloudfilename).put("editscriptfw.xml")
+            storage.child(latest).put(path)
+            data={"date": str(self.dateEdit.date().toPyDate()), "url": latest, 'username': self.userField.toPlainText(),'version_name':self.name.toPlainText(),
+                                'version_num':self.versionNum.toPlainText()}
+            puturl='/'+self.comboBox.currentText()+'/versions'
+            firebase.post(puturl, data)
 
     def validateName(self):
         if len(self.name.toPlainText()) == int(0):

@@ -490,7 +490,7 @@ font-size: 15px;</string>
 font-family: helvetica;</string>
    </property>
    <property name="text">
-    <string>Version Name</string>
+    <string>User Name</string>
    </property>
   </widget>
  </widget>
