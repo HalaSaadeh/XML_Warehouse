@@ -15,6 +15,7 @@ from xml_utilities import TwoTrees,LDPair,getParent
 import pyrebase
 from getpass import getpass
 from firebase_admin import db
+import xml.etree.ElementTree as et
 
 firebase = firebase.FirebaseApplication("https://xml-warehouse.firebaseio.com/", None)
 
@@ -306,6 +307,9 @@ class QueryChanges(QDialog):
         self.comboBox.currentIndexChanged.connect(self.updateFields)
         self.viewloaddata()
         self.query.clicked.connect(self.querychanges)
+        self.editFile.clicked.connect(editFiletab)
+        self.viewFiles.clicked.connect(viewFilestab)
+        self.addFiles.clicked.connect(addFilestab)
 
     def querychanges(self):
         versions = db.child(self.filegrp.currentText()).child("versions").get()
@@ -339,19 +343,36 @@ class QueryChanges(QDialog):
         elif num2-num1==1:
             versions = db.child(self.filegrp.currentText()).child("versions").get()
             for version in versions.each():
-                print(version.val())
                 if version.val()["version_num"] == str(num1):
                     url = version.val()["url"]
                     path = storage.child(url).get_url(None)
                     f = urllib.request.urlopen(path).read()
-                    fa = xml.dom.minidom.parseString(f)
-                    self.printResults(fa)
-
+                    self.printResults(f)
+                    break
         else:
-            print("aggregate es")
+            print("aggregate es") #method aggregate es
+            #method print results
 
     def printResults(self,es):
-        self.textEdit.setText(es)
+        tree=et.fromstring(es)
+        newtree=et.Element("editscript")
+        for a in tree:
+            if a.tag=="insert":
+                if self.insertbox.isChecked():
+                    newtree.append(a)
+            elif a.tag=="delete":
+                if self.deletebox.isChecked():
+                    newtree.append(a)
+            elif a.tag=="update":
+                if self.updatebox.isChecked():
+                    newtree.append(a)
+        treewrite=et.ElementTree()
+        treewrite._setroot(newtree)
+        treewrite.write("querychanges.xml")
+        script = open("querychanges.xml", "r")
+        result = script.read()
+        p = xml.dom.minidom.parseString(result)
+        self.textEdit.setText(p.toprettyxml())
 
     def updateFields(self):
         if self.comboBox.currentText()=="Version Num":

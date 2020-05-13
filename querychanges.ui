@@ -445,7 +445,7 @@ font-family: helvetica;</string>
     <string>Show:</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkBox">
+  <widget class="QCheckBox" name="insertbox">
    <property name="geometry">
     <rect>
      <x>490</x>
@@ -461,7 +461,7 @@ font-family: helvetica;</string>
     <string>Insertions</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkBox_2">
+  <widget class="QCheckBox" name="deletebox">
    <property name="geometry">
     <rect>
      <x>680</x>
@@ -477,7 +477,7 @@ font-family: helvetica;</string>
     <string>Deletions</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkBox_3">
+  <widget class="QCheckBox" name="updatebox">
    <property name="geometry">
     <rect>
      <x>840</x>
