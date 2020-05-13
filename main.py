@@ -350,8 +350,7 @@ class QueryChanges(QDialog):
                     self.printResults(f)
                     break
         else:
-            print("aggregate es") #method aggregate es
-            #method print results
+            self.aggregateEs(num1,num2)
 
     def printResults(self,es):
         tree=et.fromstring(es)
@@ -373,6 +372,19 @@ class QueryChanges(QDialog):
         result = script.read()
         p = xml.dom.minidom.parseString(result)
         self.textEdit.setText(p.toprettyxml())
+
+    def aggregateEs(self,num1, num2):
+        versions = db.child(self.filegrp.currentText()).child("versions").get()
+        aggregated=et.Element("editscript")
+        for version in versions.each():
+            if int(num1) <= int(version.val()["version_num"]) < int(num2):
+                url = version.val()["url"]
+                path = storage.child(url).get_url(None)
+                f = urllib.request.urlopen(path).read()
+                singletree=et.fromstring(f)
+                for a in singletree:
+                    aggregated.append(a)
+        self.printResults(et.tostring(aggregated))
 
     def updateFields(self):
         if self.comboBox.currentText()=="Version Num":
