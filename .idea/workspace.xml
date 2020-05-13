@@ -3,11 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="eb506003-a07e-442c-ad62-03f2350b9a0b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/addfiles.ui" beforeDir="false" afterPath="$PROJECT_DIR$/addfiles.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/editfiles.ui" beforeDir="false" afterPath="$PROJECT_DIR$/editfiles.ui" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/querychanges.ui" beforeDir="false" afterPath="$PROJECT_DIR$/querychanges.ui" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewfiles.ui" beforeDir="false" afterPath="$PROJECT_DIR$/viewfiles.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xml_utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/xml_utilities.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -103,7 +100,7 @@
       <workItem from="1589265425299" duration="4000" />
       <workItem from="1589272643130" duration="5848000" />
       <workItem from="1589279741718" duration="20662000" />
-      <workItem from="1589343948241" duration="7432000" />
+      <workItem from="1589343948241" duration="11646000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <created>1588252231412</created>
@@ -135,7 +132,18 @@
     <MESSAGE value="init commit" />
     <option name="LAST_COMMIT_MESSAGE" value="init commit" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/xml_utilities.py</url>
+          <line>17</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/XML_Warehouse$mainwindow.coverage" NAME="mainwindow Coverage Results" MODIFIED="1589353350966" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/XML_Warehouse$mainwindow.coverage" NAME="mainwindow Coverage Results" MODIFIED="1589366461567" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

@@ -9,9 +9,9 @@ from PyQt5.uic import loadUi
 import PyQt5
 from PyQt5.QtWidgets import QDialog
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QApplication, QFileDialog, QDialog, QTextEdit
+from PyQt5.QtWidgets import QApplication, QFileDialog, QDialog, QTextEdit, QTreeView
 from firebase import firebase
-from xml_utilities import TwoTrees,LDPair,getParent
+from xml_utilities import TwoTrees,LDPair,getParent,PatchingUtil
 import pyrebase
 from getpass import getpass
 from firebase_admin import db
@@ -93,6 +93,7 @@ class AddFiles(QDialog):
         email=auth.get_account_info(login['idToken'])['users'][0]['email']
         self.userField.setText(email.split('@')[0])
         self.userField.setReadOnly(True)
+        self.userField.setDisabled(True)
         self.queryChanges.clicked.connect(queryChangestab)
         self.elemHistory.clicked.connect(elemHistorytab)
 
@@ -117,6 +118,7 @@ class AddFiles(QDialog):
             print(list)
             self.versionNum.setText(str(len(list) + 1))
             self.versionNum.setReadOnly(True)
+            self.versionNum.setDisabled(True)
 
     def addnewfile(self):
         self.groupName.setVisible(True)
@@ -231,12 +233,12 @@ class EditFile(QDialog):
         email = auth.get_account_info(login['idToken'])['users'][0]['email']
         self.userField.setText(email.split('@')[0])
         self.userField.setReadOnly(True)
+        self.userField.setDisabled(True)
         self.dateEdit.setDate(QDate.currentDate())
         self.viewloaddata()
         self.entername1.setVisible(False)
         self.queryChanges.clicked.connect(queryChangestab)
         self.elemHistory.clicked.connect(elemHistorytab)
-
 
     def viewloaddata(self):
         list = firebase.get("/", "")
@@ -250,6 +252,7 @@ class EditFile(QDialog):
         list = firebase.get(field, "")
         self.versionNum.setText(str(len(list) + 1))
         self.versionNum.setReadOnly(True)
+        self.versionNum.setDisabled(True)
         self.updateFile()
 
     def updateFile(self):
@@ -263,6 +266,8 @@ class EditFile(QDialog):
         self.p=fa.toprettyxml()
         self.textEdit.setText(self.p)
         self.commit.clicked.connect(self.commitchanges)
+        patchTrial(path, "https://firebasestorage.googleapis.com/v0/b/xml-warehouse.appspot.com/o/books%2F3.xml?alt=media&token=9df6f6db-2f73-4934-9ab6-c36bd0f63c46")
+
 
     def commitchanges(self):
         if len(self.textEdit.toPlainText())!=0:
@@ -289,6 +294,10 @@ class EditFile(QDialog):
                 latesturl = '/' + self.comboBox.currentText() + '/latestfileurl'
                 firebase.post(puturl, data)
                 db.child(self.comboBox.currentText()).update({"latestfileurl": cloudfilename})
+
+def patchTrial(pathfile,pathes):
+    patch=PatchingUtil(pathfile,pathes)
+
 
 class QueryChanges(QDialog):
     def __init__(self):
@@ -477,7 +486,7 @@ class ElementHistory(QDialog):
         self.dateFrom.setDate(QDate.currentDate())
         self.comboBox.currentIndexChanged.connect(self.updateFields)
         self.viewloaddata()
-
+        self.treeView.setHeaderHidden(True)
     def updateFields(self):
         if self.comboBox.currentText()=="Version Num":
             self.toDate.setVisible(False)

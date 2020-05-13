@@ -139,6 +139,86 @@ class TwoTrees():
         tree._setroot(es)
         print(tree)
         tree.write("editscriptfw.xml")
+
+class PatchingUtil():
+    tree1=""
+    tree1ld=[]
+    es=None
+    def __init__(self,pathfile, pathES):
+        self.tree1 = self.docpreprocess(pathfile, False)
+        self.tree1ld = self.computeLD(self.tree1ld, self.tree1, None, 0)
+        self.es=self.reverseES(pathES)
+
+
+    def docpreprocess(self,path,n):
+        def prep(t):
+            if t is None:
+                return None
+            newtree=Element(t.tag)
+            for k,v in t.attrib.items():
+                attrchild = SubElement(newtree, '@ ' + k)
+                attrcontent = SubElement(attrchild, v)
+            for child in t:
+                newtree.append(prep(child))
+            if t.text is not None:
+                content = t.text
+                contentwords = content.split()
+                for word in contentwords:
+                    c = SubElement(newtree, "( " + word)
+            return newtree
+
+        if n:
+            v = open(path, "r")
+            f = v.read()
+        else:
+            f= urllib.request.urlopen(path).read()
+
+        t = et.fromstring(f)
+        tree=prep(t)
+        return tree
+
+    def computeLD(self, t, root, parent, pos, level=0):
+        rootld = LDPair(root.tag, level, parent, pos)
+        rootld.add = root
+        t.append(rootld)
+        pos = 0
+        for child in root:
+            self.computeLD(t, child, rootld, pos, level + 1)
+            pos = pos + 1
+        return t
+
+
+
+    def reverseES(self, pathES):
+        oldEs=urllib.request.urlopen(pathES).read()
+        es=et.fromstring(oldEs)
+        reverse = et.ElementTree()
+        rev = Element("editscript")
+        reverse._setroot(rev)
+        for child in es:
+            if child.tag == "insert":
+                newElem = Element("delete")
+                rev.append(newElem)
+                for a in child:
+                    newElem.append(a)
+            if child.tag == "delete":
+                newElem = Element("insert")
+                rev.append(newElem)
+                for a in child:
+                    newElem.append(a)
+            if child.tag == "update":
+                newElem = Element("update")
+                rev.append(newElem)
+                for a in child:
+                    if a.tag == "parent" or a.tag=="indexParent" or a.tag=="pos":
+                        newElem.append(a)
+                    elif a.tag=="initial":
+                        newElem.append(Element("new", {"new": a.attrib["initial"]}))
+                    elif a.tag=="new":
+                        newElem.append(Element("initial", {"initial" : a.attrib["new"]}))
+        reverse.write("editscriptbw.xml")
+
+
 class LDPair():
     label=""
     depth=0
