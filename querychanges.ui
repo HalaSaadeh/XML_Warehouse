@@ -117,7 +117,7 @@ border: 1px solid white;
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>270</y>
+     <y>320</y>
      <width>191</width>
      <height>51</height>
     </rect>
@@ -544,6 +544,33 @@ font-family: helvetica;</string>
      <width>181</width>
      <height>31</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="elemHistory">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>270</y>
+     <width>191</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: #7d97a5 ;
+  ;  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+font-family: helvetica;
+border: 1px solid white;
+
+</string>
+   </property>
+   <property name="text">
+    <string> Element History</string>
    </property>
   </widget>
  </widget>

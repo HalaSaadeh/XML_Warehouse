@@ -94,6 +94,7 @@ class AddFiles(QDialog):
         self.userField.setText(email.split('@')[0])
         self.userField.setReadOnly(True)
         self.queryChanges.clicked.connect(queryChangestab)
+        self.elemHistory.clicked.connect(elemHistorytab)
 
 
     def viewloaddata(self):
@@ -199,6 +200,7 @@ class MainWindow(QDialog):
         self.previewBox.setVisible(False)
         self.previewLabel.setVisible(False)
         self.queryChanges.clicked.connect(queryChangestab)
+        self.elemHistory.clicked.connect(elemHistorytab)
 
     def viewloaddata(self):
         list = firebase.get("/", "")
@@ -233,6 +235,8 @@ class EditFile(QDialog):
         self.viewloaddata()
         self.entername1.setVisible(False)
         self.queryChanges.clicked.connect(queryChangestab)
+        self.elemHistory.clicked.connect(elemHistorytab)
+
 
     def viewloaddata(self):
         list = firebase.get("/", "")
@@ -310,6 +314,7 @@ class QueryChanges(QDialog):
         self.editFile.clicked.connect(editFiletab)
         self.viewFiles.clicked.connect(viewFilestab)
         self.addFiles.clicked.connect(addFilestab)
+        self.elemHistory.clicked.connect(elemHistorytab)
 
     def querychanges(self):
         versions = db.child(self.filegrp.currentText()).child("versions").get()
@@ -448,6 +453,94 @@ class QueryChanges(QDialog):
                 self.vnamefrom.addItem(version.val()['version_name'])
                 self.vnameto.addItem(version.val()['version_name'])
 
+class ElementHistory(QDialog):
+    def __init__(self):
+        super(ElementHistory,self).__init__()
+        loadUi("elementhistory.ui", self)
+        self.editFile.clicked.connect(editFiletab)
+        self.viewFiles.clicked.connect(viewFilestab)
+        self.addFiles.clicked.connect(addFilestab)
+        self.queryChanges.clicked.connect(queryChangestab)
+        self.toDate.setVisible(False)
+        self.fromDate.setVisible(False)
+        self.dateTo.setVisible(False)
+        self.dateFrom.setVisible(False)
+        self.tovname.setVisible(False)
+        self.fromvname.setVisible(False)
+        self.tovnum.setVisible(False)
+        self.fromvnum.setVisible(False)
+        self.vnamefrom.setVisible(False)
+        self.vnameto.setVisible(False)
+        self.vnumfrom.setVisible(False)
+        self.vnumto.setVisible(False)
+        self.dateTo.setDate(QDate.currentDate())
+        self.dateFrom.setDate(QDate.currentDate())
+        self.comboBox.currentIndexChanged.connect(self.updateFields)
+        self.viewloaddata()
+
+    def updateFields(self):
+        if self.comboBox.currentText()=="Version Num":
+            self.toDate.setVisible(False)
+            self.fromDate.setVisible(False)
+            self.dateTo.setVisible(False)
+            self.dateFrom.setVisible(False)
+            self.tovname.setVisible(False)
+            self.fromvname.setVisible(False)
+            self.tovnum.setVisible(True)
+            self.fromvnum.setVisible(True)
+            self.vnamefrom.setVisible(False)
+            self.vnameto.setVisible(False)
+            self.vnumfrom.setVisible(True)
+            self.vnumto.setVisible(True)
+        elif self.comboBox.currentText()=="Version Name":
+            self.toDate.setVisible(False)
+            self.fromDate.setVisible(False)
+            self.dateTo.setVisible(False)
+            self.dateFrom.setVisible(False)
+            self.tovname.setVisible(True)
+            self.fromvname.setVisible(True)
+            self.tovnum.setVisible(False)
+            self.fromvnum.setVisible(False)
+            self.vnamefrom.setVisible(True)
+            self.vnameto.setVisible(True)
+            self.vnumfrom.setVisible(False)
+            self.vnumto.setVisible(False)
+        elif self.comboBox.currentText()=="Date":
+            self.toDate.setVisible(True)
+            self.fromDate.setVisible(True)
+            self.dateTo.setVisible(True)
+            self.dateFrom.setVisible(True)
+            self.tovname.setVisible(False)
+            self.fromvname.setVisible(False)
+            self.tovnum.setVisible(False)
+            self.fromvnum.setVisible(False)
+            self.vnamefrom.setVisible(False)
+            self.vnameto.setVisible(False)
+            self.vnumfrom.setVisible(False)
+            self.vnumto.setVisible(False)
+
+    def viewloaddata(self):
+        list = firebase.get("/", "")
+        for a in list:
+            self.filegrp.addItem(a)
+        self.filegrp.currentIndexChanged.connect(self.updateFields1)
+
+    def updateFields1(self):
+        if self.comboBox.currentText() == "Version Num":
+            field = '/' + self.filegrp.currentText() + "/versions"
+            list = firebase.get(field, "")
+            self.vnumto.setValue(int(len(list)))
+            self.vnumfrom.setValue(1)
+        if self.comboBox.currentText() == "Version Name":
+            versions = db.child(self.filegrp.currentText()).child("versions").get()
+            for version in versions.each():
+                self.vnamefrom.addItem(version.val()['version_name'])
+                self.vnameto.addItem(version.val()['version_name'])
+
+def elemHistorytab():
+    elemhistory=ElementHistory()
+    widget.addWidget(elemhistory)
+    widget.setCurrentIndex(widget.currentIndex()+1)
 
 def queryChangestab():
     querychanges=QueryChanges()
