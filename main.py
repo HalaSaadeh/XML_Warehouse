@@ -326,11 +326,13 @@ class QueryChanges(QDialog):
             numfrom=-1
             numto=-1
             for version in versions.each():
-                if version.val()["date"] == str(self.dateFrom.date()):
+                print(version.val()["date"])
+                print(str(self.dateFrom.date().toPyDate()))
+                if version.val()["date"] >= str(self.dateFrom.date().toPyDate()):
                     numfrom = version.val()["version_num"]
                     break
             for version in versions.each():
-                if version.val()["date"]==str(self.dateTo.date()):
+                if version.val()["date"]<=str(self.dateTo.date().toPyDate()):
                     numto=version.val()["version_num"]
             print(numfrom,numto)
             self.queryNext(int(numfrom), int(numto))
