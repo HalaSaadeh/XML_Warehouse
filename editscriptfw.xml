@@ -1,1 +1,1 @@
-<editscript><delete><indexParent indexParent="0" /><label label="( Guide" /><parent parent="catalog.book.title." /><pos pos="2" /></delete><delete><indexParent indexParent="0" /><label label="( applications" /><parent parent="catalog.book.description." /><pos pos="5" /></delete><update><indexParent indexParent="1" /><initial initial="( Fantasy" /><new new="( Fiction" /><parent parent="catalog.book.genre." /><pos pos="0" /></update></editscript>
+<editscript />

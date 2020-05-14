@@ -315,7 +315,7 @@ border: 1px solid white;
      <x>710</x>
      <y>350</y>
      <width>371</width>
-     <height>451</height>
+     <height>411</height>
     </rect>
    </property>
   </widget>
@@ -471,7 +471,7 @@ font-family: helvetica;</string>
      <x>240</x>
      <y>350</y>
      <width>441</width>
-     <height>451</height>
+     <height>411</height>
     </rect>
    </property>
    <column>
@@ -568,6 +568,23 @@ font-family: helvetica;</string>
    </property>
    <property name="text">
     <string>History</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="confirm">
+   <property name="geometry">
+    <rect>
+     <x>930</x>
+     <y>780</y>
+     <width>151</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-size:22px
+</string>
+   </property>
+   <property name="text">
+    <string>Confirm</string>
    </property>
   </widget>
  </widget>

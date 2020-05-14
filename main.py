@@ -97,7 +97,7 @@ class AddFiles(QDialog):
         self.userField.setDisabled(True)
         self.queryChanges.clicked.connect(queryChangestab)
         self.elemHistory.clicked.connect(elemHistorytab)
-
+        self.queryPast.clicked.connect(queryPasttab)
 
     def viewloaddata(self):
         list = firebase.get("/", "")
@@ -205,6 +205,7 @@ class MainWindow(QDialog):
         self.queryChanges.clicked.connect(queryChangestab)
         self.elemHistory.clicked.connect(elemHistorytab)
         self.viewOld.clicked.connect(accessPastFilestab)
+        self.queryPast.clicked.connect(queryPasttab)
 
 
     def viewloaddata(self):
@@ -243,6 +244,7 @@ class EditFile(QDialog):
         self.queryChanges.clicked.connect(queryChangestab)
         self.elemHistory.clicked.connect(elemHistorytab)
         self.viewOld.clicked.connect(accessPastFilestab)
+        self.queryPast.clicked.connect(queryPasttab)
 
     def viewloaddata(self):
         list = firebase.get("/", "")
@@ -328,6 +330,7 @@ class QueryChanges(QDialog):
         self.addFiles.clicked.connect(addFilestab)
         self.elemHistory.clicked.connect(elemHistorytab)
         self.viewOld.clicked.connect(accessPastFilestab)
+        self.queryPast.clicked.connect(queryPasttab)
 
 
     def querychanges(self):
@@ -476,6 +479,7 @@ class ElementHistory(QDialog):
         self.viewFiles.clicked.connect(viewFilestab)
         self.addFiles.clicked.connect(addFilestab)
         self.queryChanges.clicked.connect(queryChangestab)
+        self.queryPast.clicked.connect(queryPasttab)
         self.toDate.setVisible(False)
         self.fromDate.setVisible(False)
         self.dateTo.setVisible(False)
@@ -561,6 +565,24 @@ class ElementHistory(QDialog):
         f = urllib.request.urlopen(path).read()
         self.treeWidget.clear()
         printtree(self.treeWidget, f)
+        self.confirm.clicked.connect(self.getHistory)
+
+    def getHistory(self):
+        if self.comboBox.currentText()=="Version Num":
+            num1=self.vnumfrom.value()
+            num2=self.vnumto.value()
+            item = self.treeWidget.currentItem()
+            k=self.getParentTree(item)
+            print(k)
+
+    def getParentTree(self,item):
+        def getP(item,out):
+            if item.parent() is None:
+                return out;
+            out = item.parent().text(0) + "/" + out
+            return getP(item.parent(), out)
+        output=getP(item,"")
+        return output
 
 def printtree(treeWidget, s):
     treeWidget.setColumnCount(1)
@@ -599,6 +621,7 @@ class AccessPastFiles(QDialog):
         self.comboBox.currentIndexChanged.connect(self.updateFields)
         self.viewloaddata()
         self.viewFile.clicked.connect(self.loadFile)
+        self.queryPast.clicked.connect(queryPasttab)
     def updateFields(self):
         if self.comboBox.currentText()=="Version Num":
             self.fromDate.setVisible(False)
@@ -691,7 +714,21 @@ class AccessPastFiles(QDialog):
             storage.child("/temp/patched.xml").put("patched.xml")
             k=k-1
 
+class QueryPast(QDialog):
+    def __init__(self):
+        super(QueryPast, self).__init__()
+        loadUi("querypast.ui", self)
+        self.editFile.clicked.connect(editFiletab)
+        self.viewFiles.clicked.connect(viewFilestab)
+        self.addFiles.clicked.connect(addFilestab)
+        self.viewOld.clicked.connect(accessPastFilestab)
+        self.queryChanges.clicked.connect(queryChangestab)
+        self.elemHistory.clicked.connect(elemHistorytab)
 
+def queryPasttab():
+    querypast=QueryPast()
+    widget.addWidget(querypast)
+    widget.setCurrentIndex(widget.currentIndex() + 1)
 
 def accessPastFilestab():
     pastfile=AccessPastFiles()

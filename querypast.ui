@@ -125,8 +125,8 @@ border: 1px solid white;
    </property>
    <property name="styleSheet">
     <string notr="true">
-background-color: #7d97a5 ;
-  border: none;
+background-color: #becbd2  ;
+
   color: white;
   padding: 15px 32px;
   text-align: center;
@@ -213,73 +213,6 @@ font-size:14px;
     </property>
    </item>
   </widget>
-  <widget class="QLabel" name="fromvname">
-   <property name="geometry">
-    <rect>
-     <x>470</x>
-     <y>240</y>
-     <width>201</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: #303e45 ;
-  font-size: 22px;
-font-family: helvetica;</string>
-   </property>
-   <property name="text">
-    <string>From: Version Name</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="fromvnum">
-   <property name="geometry">
-    <rect>
-     <x>470</x>
-     <y>240</y>
-     <width>271</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: #303e45 ;
-  font-size: 22px;
-font-family: helvetica;</string>
-   </property>
-   <property name="text">
-    <string>From: Version Number</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="fromDate">
-   <property name="geometry">
-    <rect>
-     <x>500</x>
-     <y>240</y>
-     <width>191</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: #303e45 ;
-  font-size: 22px;
-font-family: helvetica;</string>
-   </property>
-   <property name="text">
-    <string>From: Date </string>
-   </property>
-  </widget>
-  <widget class="QDateEdit" name="dateFrom">
-   <property name="geometry">
-    <rect>
-     <x>680</x>
-     <y>260</y>
-     <width>181</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font-size:20px;</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="editFile">
    <property name="geometry">
     <rect>
@@ -313,23 +246,10 @@ border: 1px solid white;
    <property name="geometry">
     <rect>
      <x>710</x>
-     <y>330</y>
+     <y>590</y>
      <width>371</width>
-     <height>471</height>
+     <height>201</height>
     </rect>
-   </property>
-  </widget>
-  <widget class="QSpinBox" name="vnumfrom">
-   <property name="geometry">
-    <rect>
-     <x>710</x>
-     <y>260</y>
-     <width>51</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font-size:16px;</string>
    </property>
   </widget>
   <widget class="QComboBox" name="filegrp">
@@ -365,23 +285,13 @@ font-family: helvetica;</string>
     <string>Select File Group</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="vnamefrom">
-   <property name="geometry">
-    <rect>
-     <x>680</x>
-     <y>260</y>
-     <width>181</width>
-     <height>31</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QTreeWidget" name="treeWidget">
    <property name="geometry">
     <rect>
      <x>240</x>
      <y>330</y>
      <width>441</width>
-     <height>471</height>
+     <height>461</height>
     </rect>
    </property>
    <column>
@@ -428,8 +338,9 @@ border: 1px solid white;
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: #becbd2  ;
-  border: none;
+    <string notr="true">  border: none;
+background-color: #7d97a5 ;
+
   color: white;
   padding: 15px 32px;
   text-align: center;
@@ -443,6 +354,472 @@ border: 1px solid white;
    </property>
    <property name="text">
     <string>Access Past Files</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="vnameto">
+   <property name="geometry">
+    <rect>
+     <x>880</x>
+     <y>250</y>
+     <width>181</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="tovnum">
+   <property name="geometry">
+    <rect>
+     <x>670</x>
+     <y>230</y>
+     <width>271</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #303e45 ;
+  font-size: 22px;
+font-family: helvetica;</string>
+   </property>
+   <property name="text">
+    <string>To: Version Number</string>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="vnumfrom">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>250</y>
+     <width>51</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-size:16px;</string>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="vnumto">
+   <property name="geometry">
+    <rect>
+     <x>900</x>
+     <y>250</y>
+     <width>51</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-size:16px;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="fromvnum">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>230</y>
+     <width>271</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #303e45 ;
+  font-size: 22px;
+font-family: helvetica;</string>
+   </property>
+   <property name="text">
+    <string>From: Version Number</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="fromDate">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>230</y>
+     <width>191</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #303e45 ;
+  font-size: 22px;
+font-family: helvetica;</string>
+   </property>
+   <property name="text">
+    <string>From: Date </string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="tovname">
+   <property name="geometry">
+    <rect>
+     <x>670</x>
+     <y>230</y>
+     <width>201</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #303e45 ;
+  font-size: 22px;
+font-family: helvetica;</string>
+   </property>
+   <property name="text">
+    <string>To: Version Name</string>
+   </property>
+  </widget>
+  <widget class="QDateEdit" name="dateTo">
+   <property name="geometry">
+    <rect>
+     <x>880</x>
+     <y>250</y>
+     <width>181</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-size:20px;</string>
+   </property>
+  </widget>
+  <widget class="QDateEdit" name="dateFrom">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>250</y>
+     <width>181</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-size:20px;</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="vnamefrom">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>250</y>
+     <width>181</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="fromvname">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>230</y>
+     <width>201</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #303e45 ;
+  font-size: 22px;
+font-family: helvetica;</string>
+   </property>
+   <property name="text">
+    <string>From: Version Name</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="toDate">
+   <property name="geometry">
+    <rect>
+     <x>720</x>
+     <y>230</y>
+     <width>191</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #303e45 ;
+  font-size: 22px;
+font-family: helvetica;</string>
+   </property>
+   <property name="text">
+    <string>To: Date </string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>710</x>
+     <y>540</y>
+     <width>221</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #303e45 ;
+  font-size: 22px;
+font-family: helvetica;</string>
+   </property>
+   <property name="text">
+    <string>Results</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="xQuery">
+   <property name="geometry">
+    <rect>
+     <x>710</x>
+     <y>350</y>
+     <width>371</width>
+     <height>41</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>710</x>
+     <y>300</y>
+     <width>221</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #303e45 ;
+  font-size: 22px;
+font-family: helvetica;</string>
+   </property>
+   <property name="text">
+    <string>XPath</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="query">
+   <property name="geometry">
+    <rect>
+     <x>950</x>
+     <y>800</y>
+     <width>131</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-size:22px</string>
+   </property>
+   <property name="text">
+    <string>Query</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_6">
+   <property name="geometry">
+    <rect>
+     <x>710</x>
+     <y>390</y>
+     <width>221</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #303e45 ;
+  font-size: 22px;
+font-family: helvetica;</string>
+   </property>
+   <property name="text">
+    <string>Conditions</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="condition1">
+   <property name="geometry">
+    <rect>
+     <x>710</x>
+     <y>440</y>
+     <width>151</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="operator_2">
+   <property name="geometry">
+    <rect>
+     <x>870</x>
+     <y>450</y>
+     <width>61</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>=</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>!=</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>&lt;</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>&lt;=</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>&gt;</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>&gt;=</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QTextEdit" name="xQuery_2">
+   <property name="geometry">
+    <rect>
+     <x>940</x>
+     <y>440</y>
+     <width>151</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>690</x>
+     <y>480</y>
+     <width>16</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>+</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="condition1_2">
+   <property name="geometry">
+    <rect>
+     <x>710</x>
+     <y>480</y>
+     <width>151</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="operator_3">
+   <property name="geometry">
+    <rect>
+     <x>870</x>
+     <y>490</y>
+     <width>61</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>=</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>!=</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>&lt;</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>&lt;=</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>&gt;</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>&gt;=</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QTextEdit" name="xQuery_3">
+   <property name="geometry">
+    <rect>
+     <x>940</x>
+     <y>480</y>
+     <width>151</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="condition1_3">
+   <property name="geometry">
+    <rect>
+     <x>710</x>
+     <y>520</y>
+     <width>151</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="operator_4">
+   <property name="geometry">
+    <rect>
+     <x>870</x>
+     <y>530</y>
+     <width>61</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>=</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>!=</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>&lt;</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>&lt;=</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>&gt;</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>&gt;=</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QTextEdit" name="xQuery_4">
+   <property name="geometry">
+    <rect>
+     <x>940</x>
+     <y>520</y>
+     <width>151</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_2">
+   <property name="geometry">
+    <rect>
+     <x>690</x>
+     <y>520</y>
+     <width>16</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>+</string>
    </property>
   </widget>
  </widget>
