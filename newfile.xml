@@ -2,13 +2,13 @@
 <LAU>
 	
    
-	<Course id="123345">
+	<Course id="bk101">
 		
       
 		<inst>DR Zahi nakad</inst>
 		
       
-		<name>Embedded</name>
+		<name>Embedded Systems</name>
 		
       
 		<genre>Hardware</genre>
@@ -22,7 +22,7 @@
 	</Course>
 	
    
-	<Course id="45678">
+	<Course id="bk102">
 		
             
 		<inst>DR Zahi Nakad</inst>

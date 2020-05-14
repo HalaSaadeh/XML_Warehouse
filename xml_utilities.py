@@ -15,22 +15,30 @@ class TwoTrees():
     tree2=""
     tree1ld=[]
     tree2ld=[]
+    es=None
+    chawathe_matrix=None
     def __init__(self, path1, path2):
         self.path1=path1
         self.path2=path2
+        self.tree1 = ""
+        self.tree2 = ""
         self.tree1= self.docpreprocess(path1,False)
         self.tree2=self.docpreprocess(path2,True)
-        self.tree1ld.append(LDPair("0",-1,None,0))
-        self.tree2ld.append(LDPair("0", -1, None, 0))
+        self.tree1ld = []
+        self.tree2ld = []
+        self.tree1ld.append(LDPair("0",-1,None,0,None))
+        self.tree2ld.append(LDPair("0", -1, None, 0,None))
         self.tree1ld = self.computeLD(self.tree1ld, self.tree1, None, 0)
         self.tree2ld = self.computeLD(self.tree2ld, self.tree2, None, 0)
+        open("editscriptfw.xml", "w").close()
+
     def docpreprocess(self,path,n):
         def prep(t):
             if t is None:
                 return None
             newtree=Element(t.tag)
             for k,v in t.attrib.items():
-                attrchild = SubElement(newtree, '@ ' + k)
+                attrchild = SubElement(newtree, '@' + k)
                 attrcontent = SubElement(attrchild, v)
             for child in t:
                 newtree.append(prep(child))
@@ -57,7 +65,7 @@ class TwoTrees():
         return es
 
     def computeLD(self,t,root,parent,pos,level=0):
-        rootld=LDPair(root.tag,level,parent,pos)
+        rootld=LDPair(root.tag,level,parent,pos,root)
         rootld.add=root
         t.append(rootld)
         pos=0
@@ -93,27 +101,46 @@ class TwoTrees():
         return chmatrix
 
     def editScript(self,matrix):
+        es = None
         es = Element("editscript")
+        for a in es:
+            print(a)
         rows=matrix.shape[0]
         cols=matrix.shape[1]
         i=rows-1
         j=cols-1
+        for a in self.tree1ld:
+            print(a.label)
         while i>0 and j>0:
             if (matrix[i,j]==matrix[i-1,j]+1) and (j==cols-1 or (j<cols-1 and self.tree2ld[j+1].depth<=self.tree1ld[i].depth)):
-                m=j+1
-                while self.tree2ld[m].depth==self.tree1ld[i].depth:
-                    m=m-1
                 es.insert(0, Element("delete"))
                 newelem = es[0]
+                parent = getParent(self.tree1ld[i], "")
+                parentpath=parent.replace('.', '/')
+                parentpath=parentpath.replace('@', '&commat;')
+                parentpath = parentpath[(len(self.tree1.tag)):]
+                parentpath=parentpath[0:len(parentpath)-1]
+                parents=self.tree1.findall("./"+parentpath)
+                m=""
+                for k in range(len(parents)):
+                    if parents[k] is (self.tree1ld[i]).parent.add:
+                        m=k
                 newelem.insert(0,Element("indexParent",{"indexParent": str(m)}))
                 newelem.insert(1,Element("label", {"label": str(self.tree1ld[i].label) }))
-                newelem.insert(2,Element("parent",  {"parent": getParent(self.tree1ld[i],"")}));
+                newelem.insert(2,Element("parent",  {"parent": parent}));
                 newelem.insert(3,Element("pos", {"pos": str(self.tree1ld[i].pos)}))
                 i=i-1
             elif (matrix[i,j]==matrix[i,j-1]+1) and (i==rows-1 or (i<rows-1 and self.tree1ld[i+1].depth<=self.tree2ld[j].depth)):
-                m = i + 1
-                while self.tree1ld[m].depth == self.tree2ld[j].depth:
-                    m = m - 1
+                parent = getParent(self.tree1ld[i], "")
+                parentpath = parent.replace('.', '/')
+                parentpath=parentpath.replace('@', '&commat;')
+                parentpath = parentpath[(len(self.tree1.tag)):]
+                parentpath = parentpath[0:len(parentpath) - 1]
+                parents = self.tree1.findall("./" + parentpath)
+                m = ""
+                for k in range(len(parents)):
+                    if parents[k] is (self.tree1ld[i]).parent.add:
+                        m = k
                 es.insert(0, Element("insert"))
                 newelem = es[0]
                 newelem.insert(0,Element("indexParent", {"indexParent": str(m)}))
@@ -122,16 +149,25 @@ class TwoTrees():
                 newelem.insert(3,Element("pos", {"pos": str(self.tree2ld[j].pos)}))
                 j=j-1
             else:
-                m = j
-                while self.tree2ld[m].depth == self.tree1ld[i].depth:
-                    m = m - 1
+
                 if(self.tree1ld[i].label!=self.tree2ld[j].label):
+                    parent = getParent(self.tree1ld[i], "")
+                    parentpath = parent.replace('.', '/')
+                    parentpath = parentpath.replace('@', '&commat;')
+                    parentpath = parentpath[(len(self.tree1.tag)):]
+                    parentpath = parentpath[0:len(parentpath) - 1]
+                    parents = self.tree1.findall("./" + parentpath)
+                    m = ""
+                    for k in range(len(parents)):
+                        print(parents[k])
+                        if parents[k] is (self.tree1ld[i]).parent.add:
+                            m = k
                     es.insert(0, Element("update"))
                     newelem=es[0]
                     newelem.insert(0,Element("indexParent", {"indexParent": str(m)}))
                     newelem.insert(1,Element("initial", {"initial": self.tree1ld[i].label}))
                     newelem.insert(2,Element("new", {"new": str(self.tree2ld[j].label)}))
-                    newelem.insert(3,Element("parent", {"parent": getParent(self.tree2ld[i], "")}));
+                    newelem.insert(3,Element("parent", {"parent": parent}));
                     newelem.insert(4,Element("pos", {"pos": str(self.tree1ld[i].pos)}))
                 i=i-1
                 j=j-1
@@ -145,7 +181,10 @@ class PatchingUtil():
     tree1ld=[]
     es=None
     def __init__(self,pathfile, pathES):
+        self.tree1 = ""
         self.tree1 = self.docpreprocess(pathfile, False)
+        self.tree1ld = []
+        self.tree1ld.append(LDPair("0", -1, None, 0, None))
         self.tree1ld = self.computeLD(self.tree1ld, self.tree1, None, 0)
         self.es=self.reverseES(pathES)
 
@@ -178,7 +217,7 @@ class PatchingUtil():
         return tree
 
     def computeLD(self, t, root, parent, pos, level=0):
-        rootld = LDPair(root.tag, level, parent, pos)
+        rootld = LDPair(root.tag, level, parent, pos, root)
         rootld.add = root
         t.append(rootld)
         pos = 0
@@ -216,7 +255,78 @@ class PatchingUtil():
                         newElem.append(Element("new", {"new": a.attrib["initial"]}))
                     elif a.tag=="new":
                         newElem.append(Element("initial", {"initial" : a.attrib["new"]}))
+
+        open("editscriptbw.xml", "w").close()
         reverse.write("editscriptbw.xml")
+
+    def patch(self):
+        v = open("editscriptbw.xml", "r")
+        file = v.read()
+        es = et.fromstring(file)
+        print("hi")
+        for command in es:
+            if command.tag =="delete":
+                parentpath=command.find('.//parent').attrib["parent"]
+                label=command.find('.//label').attrib["label"]
+                parentpath=parentpath.replace('.','/')
+                parentpath = parentpath[(len(self.tree1.tag)):]
+                parentpath=parentpath[0:len(parentpath)-1]
+                parents=self.tree1.findall("./"+parentpath)
+                parent=parents[command.find('.//indexParent').attrib["indexParent"]]
+                index = int(command.find('.//pos').attrib["pos"])
+                child=parent[index]
+                parent.remove(child)
+            if command.tag =="insert":
+                parentpath=command.find('.//parent').attrib["parent"]
+                label=command.find('.//label').attrib["label"]
+                parentpath=parentpath.replace('.','/')
+                parentpath = parentpath[(len(self.tree1.tag)):]
+                parentpath=parentpath[0:len(parentpath)-1]
+                parents=self.tree1.findall("./"+parentpath)
+                parent=parents[int(command.find('.//indexParent').attrib["indexParent"])]
+                print(parent.tag)
+                index=int(command.find('.//pos').attrib["pos"])
+                parent.insert(index, Element(label))
+            if command.tag =="update":
+                parentpath=command.find('.//parent').attrib["parent"]
+                initial=command.find('.//initial').attrib["initial"]
+                new=command.find('.//new').attrib["new"]
+                parentpath=parentpath.replace('.','/')
+                parentpath = parentpath[(len(self.tree1.tag)):]
+                parentpath=parentpath[0:len(parentpath)-1]
+                parents=self.tree1.findall("./"+parentpath)
+                parent=parents[int(command.find('.//indexParent').attrib["indexParent"])]
+                index = int(command.find('.//pos').attrib["pos"])
+                child=parent[index]
+                child.tag=new
+        self.postprocess()
+
+    def postprocess(self):
+        def docpostprocessing(t):
+            if t is None:
+                return None
+            newtree = Element(t.tag)
+            for child in t:
+                if child.tag[0] == '@':
+                    for attrchild in child:
+                        content = attrchild.tag
+                        newtree.attrib[child.tag[2:]]=content
+                elif child.tag[0] == '(':
+                    out = ""
+                    if not newtree.text is None:
+                        out = newtree.text + ""
+                    out = out + " "+ child.tag[2:]
+                    newtree.text = out
+                else:
+                    newtree.append(docpostprocessing(child))
+            return newtree
+        newtree=docpostprocessing(self.tree1)
+        tree = et.ElementTree()
+        tree._setroot(newtree)
+        open("patched.xml", "w").close()
+        tree.write("patched.xml")
+
+
 
 
 class LDPair():
@@ -226,11 +336,12 @@ class LDPair():
     pos=0
     id=0
     add=None
-    def __init__(self,label, depth,parent,pos):
+    def __init__(self,label, depth,parent,pos,add):
         self.label=label
         self.depth=depth
         self.parent=parent
         self.pos=pos
+        self.add=add
     def printld(self):
         print(self.label, ",",self.depth)
 

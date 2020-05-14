@@ -266,7 +266,7 @@ class EditFile(QDialog):
         self.p=fa.toprettyxml()
         self.textEdit.setText(self.p)
         self.commit.clicked.connect(self.commitchanges)
-        patchTrial(path, "https://firebasestorage.googleapis.com/v0/b/xml-warehouse.appspot.com/o/books%2F3.xml?alt=media&token=9df6f6db-2f73-4934-9ab6-c36bd0f63c46")
+     #   patchTrial(path, "https://firebasestorage.googleapis.com/v0/b/xml-warehouse.appspot.com/o/books%2F1.xml?alt=media&token=e0b57581-9771-496e-9d7c-63089b645b36")
 
 
     def commitchanges(self):
@@ -278,10 +278,9 @@ class EditFile(QDialog):
                 path1 = "newfile.xml"
                 latesturl = '/' + self.comboBox.currentText() + '/latestfileurl'
                 url = firebase.get(latesturl, "")
-                print(url)
                 path = storage.child(url).get_url(None)
-                newversion = TwoTrees(path, path1)
-                newversion.computeES()
+                newerversion = TwoTrees(path, path1)
+                newerversion.computeES()
                 cloudfilename = '/' + self.comboBox.currentText() + '/' + self.versionNum.toPlainText() + ".xml"
                 cloudfilename2 = '/' + self.comboBox.currentText() + '/' + str(
                     int(self.versionNum.toPlainText()) - 1) + ".xml"
@@ -295,9 +294,9 @@ class EditFile(QDialog):
                 firebase.post(puturl, data)
                 db.child(self.comboBox.currentText()).update({"latestfileurl": cloudfilename})
 
-def patchTrial(pathfile,pathes):
+def patchDocs(pathfile,pathes):
     patch=PatchingUtil(pathfile,pathes)
-
+    patch.patch()
 
 class QueryChanges(QDialog):
     def __init__(self):
@@ -383,6 +382,7 @@ class QueryChanges(QDialog):
                     newtree.append(a)
         treewrite=et.ElementTree()
         treewrite._setroot(newtree)
+        open("querychanges.xml", "w").close()
         treewrite.write("querychanges.xml")
         script = open("querychanges.xml", "r")
         result = script.read()
