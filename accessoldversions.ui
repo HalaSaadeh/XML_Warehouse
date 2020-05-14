@@ -157,7 +157,7 @@ font-size:30px;
 color: #435761  ;</string>
    </property>
    <property name="text">
-    <string>Query Changes- View Element History</string>
+    <string>Query the Past- Access Previous Versions</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
@@ -216,7 +216,7 @@ font-size:14px;
   <widget class="QLabel" name="fromvname">
    <property name="geometry">
     <rect>
-     <x>240</x>
+     <x>460</x>
      <y>240</y>
      <width>201</width>
      <height>71</height>
@@ -228,13 +228,13 @@ font-size:14px;
 font-family: helvetica;</string>
    </property>
    <property name="text">
-    <string>From: Version Name</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:13pt;&quot;&gt;Version Name&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
   <widget class="QLabel" name="fromvnum">
    <property name="geometry">
     <rect>
-     <x>240</x>
+     <x>440</x>
      <y>240</y>
      <width>271</width>
      <height>71</height>
@@ -246,15 +246,15 @@ font-family: helvetica;</string>
 font-family: helvetica;</string>
    </property>
    <property name="text">
-    <string>From: Version Number</string>
+    <string>Version Number</string>
    </property>
   </widget>
   <widget class="QLabel" name="fromDate">
    <property name="geometry">
     <rect>
-     <x>270</x>
+     <x>470</x>
      <y>240</y>
-     <width>191</width>
+     <width>131</width>
      <height>71</height>
     </rect>
    </property>
@@ -264,13 +264,13 @@ font-family: helvetica;</string>
 font-family: helvetica;</string>
    </property>
    <property name="text">
-    <string>From: Date </string>
+    <string>Version Date </string>
    </property>
   </widget>
   <widget class="QDateEdit" name="dateFrom">
    <property name="geometry">
     <rect>
-     <x>450</x>
+     <x>610</x>
      <y>260</y>
      <width>181</width>
      <height>31</height>
@@ -312,97 +312,17 @@ border: 1px solid white;
   <widget class="QTextEdit" name="textEdit">
    <property name="geometry">
     <rect>
-     <x>710</x>
+     <x>260</x>
      <y>330</y>
-     <width>371</width>
-     <height>471</height>
+     <width>801</width>
+     <height>431</height>
     </rect>
-   </property>
-  </widget>
-  <widget class="QDateEdit" name="dateTo">
-   <property name="geometry">
-    <rect>
-     <x>870</x>
-     <y>260</y>
-     <width>181</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font-size:20px;</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="toDate">
-   <property name="geometry">
-    <rect>
-     <x>710</x>
-     <y>240</y>
-     <width>191</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: #303e45 ;
-  font-size: 22px;
-font-family: helvetica;</string>
-   </property>
-   <property name="text">
-    <string>To: Date </string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="tovname">
-   <property name="geometry">
-    <rect>
-     <x>660</x>
-     <y>240</y>
-     <width>201</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: #303e45 ;
-  font-size: 22px;
-font-family: helvetica;</string>
-   </property>
-   <property name="text">
-    <string>To: Version Name</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="tovnum">
-   <property name="geometry">
-    <rect>
-     <x>660</x>
-     <y>240</y>
-     <width>271</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: #303e45 ;
-  font-size: 22px;
-font-family: helvetica;</string>
-   </property>
-   <property name="text">
-    <string>To: Version Number</string>
    </property>
   </widget>
   <widget class="QSpinBox" name="vnumfrom">
    <property name="geometry">
     <rect>
-     <x>480</x>
-     <y>260</y>
-     <width>51</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font-size:16px;</string>
-   </property>
-  </widget>
-  <widget class="QSpinBox" name="vnumto">
-   <property name="geometry">
-    <rect>
-     <x>890</x>
+     <x>610</x>
      <y>260</y>
      <width>51</width>
      <height>31</height>
@@ -445,37 +365,22 @@ font-family: helvetica;</string>
     <string>Select File Group</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="vnameto">
-   <property name="geometry">
-    <rect>
-     <x>870</x>
-     <y>260</y>
-     <width>181</width>
-     <height>31</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QComboBox" name="vnamefrom">
    <property name="geometry">
     <rect>
-     <x>450</x>
+     <x>610</x>
      <y>260</y>
      <width>181</width>
      <height>31</height>
     </rect>
    </property>
+   <item>
+    <property name="text">
+     <string/>
+    </property>
+   </item>
   </widget>
-  <widget class="QTreeView" name="treeView">
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>330</y>
-     <width>441</width>
-     <height>471</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="queryChanges_2">
+  <widget class="QPushButton" name="elemHistory">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -500,7 +405,7 @@ border: 1px solid white;
 </string>
    </property>
    <property name="text">
-    <string> Element History</string>
+    <string> Element Changes</string>
    </property>
   </widget>
   <widget class="QPushButton" name="viewOld">
@@ -530,6 +435,43 @@ border: 1px solid white;
     <string>Access Past Files</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="viewFile">
+   <property name="geometry">
+    <rect>
+     <x>922</x>
+     <y>787</y>
+     <width>151</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-size:20px;</string>
+   </property>
+   <property name="text">
+    <string>View File</string>
+   </property>
+  </widget>
+  <zorder>listView</zorder>
+  <zorder>viewFiles</zorder>
+  <zorder>addFiles</zorder>
+  <zorder>queryChanges</zorder>
+  <zorder>queryPast</zorder>
+  <zorder>label</zorder>
+  <zorder>label_2</zorder>
+  <zorder>comboBox</zorder>
+  <zorder>fromvname</zorder>
+  <zorder>fromvnum</zorder>
+  <zorder>fromDate</zorder>
+  <zorder>dateFrom</zorder>
+  <zorder>editFile</zorder>
+  <zorder>textEdit</zorder>
+  <zorder>filegrp</zorder>
+  <zorder>label_4</zorder>
+  <zorder>vnamefrom</zorder>
+  <zorder>elemHistory</zorder>
+  <zorder>viewOld</zorder>
+  <zorder>vnumfrom</zorder>
+  <zorder>viewFile</zorder>
  </widget>
  <resources/>
  <connections/>

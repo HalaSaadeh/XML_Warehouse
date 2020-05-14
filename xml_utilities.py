@@ -180,12 +180,14 @@ class PatchingUtil():
     tree1=""
     tree1ld=[]
     es=None
+    open("editscriptbw.xml", 'w').close()
     def __init__(self,pathfile, pathES):
         self.tree1 = ""
         self.tree1 = self.docpreprocess(pathfile, False)
         self.tree1ld = []
         self.tree1ld.append(LDPair("0", -1, None, 0, None))
         self.tree1ld = self.computeLD(self.tree1ld, self.tree1, None, 0)
+        es=None
         self.es=self.reverseES(pathES)
 
 
@@ -272,9 +274,12 @@ class PatchingUtil():
                 parentpath = parentpath[(len(self.tree1.tag)):]
                 parentpath=parentpath[0:len(parentpath)-1]
                 parents=self.tree1.findall("./"+parentpath)
-                parent=parents[command.find('.//indexParent').attrib["indexParent"]]
+                parent=parents[int(command.find('.//indexParent').attrib["indexParent"])]
                 index = int(command.find('.//pos').attrib["pos"])
-                child=parent[index]
+                for child in list(parent):
+                    print(child)
+                print(len(list(parent)))
+                child=list(parent)[index]
                 parent.remove(child)
             if command.tag =="insert":
                 parentpath=command.find('.//parent').attrib["parent"]

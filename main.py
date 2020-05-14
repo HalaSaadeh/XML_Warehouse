@@ -7,7 +7,7 @@ import xml.dom.minidom
 from PyQt5.QtCore import QDate
 from PyQt5.uic import loadUi
 import PyQt5
-from PyQt5.QtWidgets import QDialog
+from PyQt5.QtWidgets import QDialog, QTreeWidgetItem
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QFileDialog, QDialog, QTextEdit, QTreeView
 from firebase import firebase
@@ -80,6 +80,7 @@ class AddFiles(QDialog):
         loadUi("addfiles.ui", self)
         self.viewFiles.clicked.connect(viewFilestab)
         self.editFile.clicked.connect(editFiletab)
+        self.viewOld.clicked.connect(accessPastFilestab)
         self.viewloaddata()
         self.groupName.setVisible(False)
         self.nameField.setVisible(False)
@@ -203,6 +204,8 @@ class MainWindow(QDialog):
         self.previewLabel.setVisible(False)
         self.queryChanges.clicked.connect(queryChangestab)
         self.elemHistory.clicked.connect(elemHistorytab)
+        self.viewOld.clicked.connect(accessPastFilestab)
+
 
     def viewloaddata(self):
         list = firebase.get("/", "")
@@ -239,6 +242,7 @@ class EditFile(QDialog):
         self.entername1.setVisible(False)
         self.queryChanges.clicked.connect(queryChangestab)
         self.elemHistory.clicked.connect(elemHistorytab)
+        self.viewOld.clicked.connect(accessPastFilestab)
 
     def viewloaddata(self):
         list = firebase.get("/", "")
@@ -323,6 +327,8 @@ class QueryChanges(QDialog):
         self.viewFiles.clicked.connect(viewFilestab)
         self.addFiles.clicked.connect(addFilestab)
         self.elemHistory.clicked.connect(elemHistorytab)
+        self.viewOld.clicked.connect(accessPastFilestab)
+
 
     def querychanges(self):
         versions = db.child(self.filegrp.currentText()).child("versions").get()
@@ -485,8 +491,10 @@ class ElementHistory(QDialog):
         self.dateTo.setDate(QDate.currentDate())
         self.dateFrom.setDate(QDate.currentDate())
         self.comboBox.currentIndexChanged.connect(self.updateFields)
+      #  self.filegrp.currentIndexChanged.connect(self.updateFields1())
         self.viewloaddata()
-        self.treeView.setHeaderHidden(True)
+        self.viewOld.clicked.connect(accessPastFilestab)
+
     def updateFields(self):
         if self.comboBox.currentText()=="Version Num":
             self.toDate.setVisible(False)
@@ -545,6 +553,150 @@ class ElementHistory(QDialog):
             for version in versions.each():
                 self.vnamefrom.addItem(version.val()['version_name'])
                 self.vnameto.addItem(version.val()['version_name'])
+        latesturl = '/' + self.filegrp.currentText() + '/latestfileurl'
+        url = firebase.get(latesturl, "")
+        print(url)
+        path = storage.child(url).get_url(None)
+        print(path)
+        f = urllib.request.urlopen(path).read()
+        self.treeWidget.clear()
+        printtree(self.treeWidget, f)
+
+def printtree(treeWidget, s):
+    treeWidget.setColumnCount(1)
+    tree = et.fromstring(s)
+    a= QTreeWidgetItem([tree.tag])
+    treeWidget.addTopLevelItem(a)
+    def displaytree(a,s):
+        for child in s:
+            branch=QTreeWidgetItem([child.tag])
+            a.addChild(branch)
+            displaytree(branch,child)
+        if s.text is not None:
+            content = s.text
+            contentwords = content.split()
+            for word in contentwords:
+                a.addChild(QTreeWidgetItem([word]))
+    displaytree(a,tree)
+
+
+class AccessPastFiles(QDialog):
+    def __init__(self):
+        super(AccessPastFiles, self).__init__()
+        loadUi("accessoldversions.ui", self)
+        self.editFile.clicked.connect(editFiletab)
+        self.viewFiles.clicked.connect(viewFilestab)
+        self.addFiles.clicked.connect(addFilestab)
+        self.queryChanges.clicked.connect(queryChangestab)
+        self.elemHistory.clicked.connect(elemHistorytab)
+        self.fromDate.setVisible(False)
+        self.dateFrom.setVisible(False)
+        self.fromvname.setVisible(False)
+        self.fromvnum.setVisible(False)
+        self.vnamefrom.setVisible(False)
+        self.vnumfrom.setVisible(False)
+        self.dateFrom.setDate(QDate.currentDate())
+        self.comboBox.currentIndexChanged.connect(self.updateFields)
+        self.viewloaddata()
+        self.viewFile.clicked.connect(self.loadFile)
+    def updateFields(self):
+        if self.comboBox.currentText()=="Version Num":
+            self.fromDate.setVisible(False)
+            self.dateFrom.setVisible(False)
+            self.fromvname.setVisible(False)
+            self.fromvnum.setVisible(True)
+            self.vnamefrom.setVisible(False)
+            self.vnumfrom.setVisible(True)
+        elif self.comboBox.currentText()=="Version Name":
+            self.fromDate.setVisible(False)
+            self.dateFrom.setVisible(False)
+            self.fromvname.setVisible(True)
+            self.fromvnum.setVisible(False)
+            self.vnamefrom.setVisible(True)
+            self.vnumfrom.setVisible(False)
+        elif self.comboBox.currentText()=="Date":
+            self.fromDate.setVisible(True)
+            self.dateFrom.setVisible(True)
+            self.fromvname.setVisible(False)
+            self.fromvnum.setVisible(False)
+            self.vnamefrom.setVisible(False)
+            self.vnumfrom.setVisible(False)
+
+    def viewloaddata(self):
+        list = firebase.get("/", "")
+        for a in list:
+            self.filegrp.addItem(a)
+        self.filegrp.currentIndexChanged.connect(self.updateFields1)
+
+    def updateFields1(self):
+        if self.comboBox.currentText() == "Version Num":
+            field = '/' + self.filegrp.currentText() + "/versions"
+            list = firebase.get(field, "")
+            self.vnumfrom.setValue(int(len(list)))
+        if self.comboBox.currentText() == "Version Name":
+            versions = db.child(self.filegrp.currentText()).child("versions").get()
+            for version in versions.each():
+                self.vnamefrom.addItem(version.val()['version_name'])
+
+    def loadFile(self):
+        if self.comboBox.currentText()=="Version Num":
+            versions = db.child(self.filegrp.currentText()).child("versions").get()
+            for version in versions.each():
+                if int(version.val()["version_num"])==self.vnumfrom.value():
+                    num=version.val()["version_num"]
+                    field = '/' + self.filegrp.currentText() + "/latestfileurl"
+                    latestfileurl = firebase.get(field, "")
+                    if version.val()["url"]==latestfileurl:
+                        pathfile = storage.child(latestfileurl).get_url(None)
+                        f = urllib.request.urlopen(pathfile).read()
+                        self.textEdit.setText(str(f))
+                        fa = xml.dom.minidom.parseString(f)
+                        p = fa.toprettyxml()
+                        self.textEdit.setText(p)
+                        break
+                    else:
+                        num = version.val()["version_num"]
+                        self.patchSeq(num)
+                        f = open("patched.xml",'r').read()
+                        self.textEdit.setText(str(f))
+                        fa = xml.dom.minidom.parseString(f)
+                        p = fa.toprettyxml()
+                        self.textEdit.setText(p)
+
+
+
+    def patchSeq(self,num1):
+        field = '/' + self.filegrp.currentText() + "/versions"
+        list = firebase.get(field, "")
+
+        for a in list:
+            print(a)
+        latesturl = '/' + self.filegrp.currentText() + '/latestfileurl'
+        url = firebase.get(latesturl, "")
+        pathfile = storage.child(url).get_url(None)
+        newlist=[]
+        for a in list:
+            newlist.append(a)
+        path1=list[newlist[len(newlist)-2]]["url"]
+        pathes = storage.child(path1).get_url(None)
+        patchDocs(pathfile,pathes)
+        storage.child("/temp/patched.xml").put("patched.xml")
+        k = len(newlist) - 2
+        while(k>=int(num1)):
+            pathfile=storage.child("/temp/patched.xml").get_url(None)
+            path = list[newlist[k-1]]["url"]
+            print(path)
+            pathes = storage.child(path).get_url(None)
+            patchDocs(pathfile, pathes)
+            storage.child("/temp/patched.xml").put("patched.xml")
+            k=k-1
+
+
+
+def accessPastFilestab():
+    pastfile=AccessPastFiles()
+    widget.addWidget(pastfile)
+    widget.setCurrentIndex(widget.currentIndex() + 1)
 
 def elemHistorytab():
     elemhistory=ElementHistory()
