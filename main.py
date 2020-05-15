@@ -843,17 +843,45 @@ class QueryPast(QDialog):
         self.fromvnum.setVisible(False)
         self.vnamefrom.setVisible(False)
         self.vnumfrom.setVisible(False)
+        self.vnumfrom.setValue(1)
         self.dateFrom.setDate(QDate.currentDate())
         self.comboBox.currentIndexChanged.connect(self.updateFields)
         self.viewloaddata()
         self.treeWidget.itemClicked.connect(self.onItemClicked)
         self.query.clicked.connect(self.formquery)
-
+        self.refresh.clicked.connect(self.reloadtree)
     def onItemClicked(self):
         print("hi")
         item = self.treeWidget.currentItem()
         k = self.getParentTree(item)
         self.xpath.setText(k)
+
+    def patchSeq(self,num1):
+        field = '/' + self.filegrp.currentText() + "/versions"
+        list = firebase.get(field, "")
+
+        for a in list:
+            print(a)
+        latesturl = '/' + self.filegrp.currentText() + '/latestfileurl'
+        url = firebase.get(latesturl, "")
+        pathfile = storage.child(url).get_url(None)
+        newlist=[]
+        for a in list:
+            newlist.append(a)
+        path1=list[newlist[len(newlist)-2]]["url"]
+        pathes = storage.child(path1).get_url(None)
+        patchDocs(pathfile,pathes)
+        storage.child("/temp/patched.xml").put("patched.xml")
+        k = len(newlist) - 2
+        while(k>=int(num1)):
+            pathfile=storage.child("/temp/patched.xml").get_url(None)
+            path = list[newlist[k-1]]["url"]
+            print(path)
+            pathes = storage.child(path).get_url(None)
+            patchDocs(pathfile, pathes)
+            storage.child("/temp/patched.xml").put("patched.xml")
+            k=k-1
+
 
     def getParentTree(self, item):
         def getP(item, out):
@@ -897,7 +925,8 @@ class QueryPast(QDialog):
         if self.comboBox.currentText() == "Version Num":
             field = '/' + self.filegrp.currentText() + "/versions"
             list = firebase.get(field, "")
-            self.vnumfrom.setValue(1)
+            self.vnumfrom.setValue(len(list))
+            latest=len(list)
         if self.comboBox.currentText() == "Version Name":
             versions = db.child(self.filegrp.currentText()).child("versions").get()
             for version in versions.each():
@@ -910,6 +939,43 @@ class QueryPast(QDialog):
         f = urllib.request.urlopen(path).read()
         self.treeWidget.clear()
         printtree(self.treeWidget, f)
+
+    def reloadtree(self):
+        self.treeWidget.clear()
+        if self.comboBox.currentText() == "Version Num":
+            versions = db.child(self.filegrp.currentText()).child("versions").get()
+            for version in versions.each():
+                if int(version.val()["version_num"]) == self.vnumfrom.value():
+                    num = version.val()["version_num"]
+                    field = '/' + self.filegrp.currentText() + "/latestfileurl"
+                    latestfileurl = firebase.get(field, "")
+                    if version.val()["url"] == latestfileurl:
+                        pathfile = storage.child(latestfileurl).get_url(None)
+                        f = urllib.request.urlopen(pathfile).read()
+                        printtree(self.treeWidget, f)
+                        break
+                    else:
+                        num = version.val()["version_num"]
+                        self.patchSeq(num)
+                        f = open("patched.xml", 'r').read()
+                        printtree(self.treeWidget, f)
+        if self.comboBox.currentText() == "Version Name":
+            versions = db.child(self.filegrp.currentText()).child("versions").get()
+            for version in versions.each():
+                if version.val()["version_name"] == self.vnamefrom.currentText():
+                    num = version.val()["version_num"]
+                    field = '/' + self.filegrp.currentText() + "/latestfileurl"
+                    latestfileurl = firebase.get(field, "")
+                    if version.val()["url"] == latestfileurl:
+                        pathfile = storage.child(latestfileurl).get_url(None)
+                        f = urllib.request.urlopen(pathfile).read()
+                        printtree(self.treeWidget, f)
+                        break
+                    else:
+                        num = version.val()["version_num"]
+                        self.patchSeq(num)
+                        f = open("patched.xml", 'r').read()
+                        printtree(self.treeWidget, f)
 
     def add1(self):
         self.condition2.setVisible(True)
@@ -941,8 +1007,18 @@ class QueryPast(QDialog):
         f = urllib.request.urlopen(path).read()
         tree=et.fromstring(f)
         fromfield=fromfield[len(tree.tag)+1:]
-        print(tree.findall(".//"+ fromfield+"["+predicates[0]+"]"))
-        # make it do all predicates and for versions version name and date
+        results= tree.findall(".//"+ fromfield+"["+predicates[0]+"]")
+        output=""
+        #root=et.Element("results")
+        tree=et.ElementTree()
+        tree._setroot(et.Element("results"))
+        root=tree.getroot()
+        for result in results:
+            root.append(result)
+        out=et.tostring(root, encoding='utf8', method='xml')
+        self.results.setText(xml.dom.minidom.parseString(out).toprettyxml())
+def printElem(elem):
+    out="<"+ elem.tag+">"
 
 
 class Monitor(QDialog):
@@ -964,9 +1040,13 @@ class Monitor(QDialog):
         self.save.clicked.connect(self.savesubs)
 
     def savesubs(self):
+        email = auth.get_account_info(login['idToken'])['users'][0]['email']
+        user=email.split('@')[0]
         for box in self.boxes:
             if box.isChecked():
-                print(box)
+                db.child(box.text()).child("subscriptions").set({"username":user})
+                print(box.text())
+
 
 
     def loadboxes(self):
