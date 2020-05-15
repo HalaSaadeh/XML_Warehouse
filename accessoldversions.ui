@@ -451,6 +451,34 @@ border: 1px solid white;
     <string>View File</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="monitor">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>420</y>
+     <width>191</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">  border: none;
+background-color: #7d97a5 ;
+
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+font-family: helvetica;
+border: 1px solid white;
+
+</string>
+   </property>
+   <property name="text">
+    <string>Montior Files</string>
+   </property>
+  </widget>
   <zorder>listView</zorder>
   <zorder>viewFiles</zorder>
   <zorder>addFiles</zorder>
@@ -472,6 +500,7 @@ border: 1px solid white;
   <zorder>viewOld</zorder>
   <zorder>vnumfrom</zorder>
   <zorder>viewFile</zorder>
+  <zorder>monitor</zorder>
  </widget>
  <resources/>
  <connections/>

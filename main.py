@@ -10,12 +10,15 @@ import PyQt5
 from PyQt5.QtWidgets import QDialog, QTreeWidgetItem
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QFileDialog, QDialog, QTextEdit, QTreeView
+from PyQt5.uic.properties import QtCore
 from firebase import firebase
 from xml_utilities import TwoTrees,LDPair,getParent,PatchingUtil
 import pyrebase
 from getpass import getpass
 from firebase_admin import db
 import xml.etree.ElementTree as et
+from PyQt5.QtCore import pyqtSlot
+
 
 firebase = firebase.FirebaseApplication("https://xml-warehouse.firebaseio.com/", None)
 
@@ -81,6 +84,7 @@ class AddFiles(QDialog):
         self.viewFiles.clicked.connect(viewFilestab)
         self.editFile.clicked.connect(editFiletab)
         self.viewOld.clicked.connect(accessPastFilestab)
+        self.monitor.clicked.connect(monitortab)
         self.viewloaddata()
         self.groupName.setVisible(False)
         self.nameField.setVisible(False)
@@ -197,6 +201,7 @@ class MainWindow(QDialog):
         self.tableWidget.setColumnWidth(0, 120)
         self.tableWidget.setColumnWidth(1, 190)
         self.tableWidget.setColumnWidth(2, 150)
+        self.monitor.clicked.connect(monitortab)
         self.viewloaddata()
         self.addFiles.clicked.connect(addFilestab)
         self.editFile.clicked.connect(editFiletab)
@@ -234,6 +239,7 @@ class EditFile(QDialog):
         loadUi("editfiles.ui", self)
         self.viewFiles.clicked.connect(viewFilestab)
         self.addFiles.clicked.connect(addFilestab)
+        self.monitor.clicked.connect(monitortab)
         email = auth.get_account_info(login['idToken'])['users'][0]['email']
         self.userField.setText(email.split('@')[0])
         self.userField.setReadOnly(True)
@@ -322,6 +328,7 @@ class QueryChanges(QDialog):
         self.vnumto.setVisible(False)
         self.dateTo.setDate(QDate.currentDate())
         self.dateFrom.setDate(QDate.currentDate())
+        self.monitor.clicked.connect(monitortab)
         self.comboBox.currentIndexChanged.connect(self.updateFields)
         self.viewloaddata()
         self.query.clicked.connect(self.querychanges)
@@ -478,6 +485,7 @@ class ElementHistory(QDialog):
         self.editFile.clicked.connect(editFiletab)
         self.viewFiles.clicked.connect(viewFilestab)
         self.addFiles.clicked.connect(addFilestab)
+        self.monitor.clicked.connect(monitortab)
         self.queryChanges.clicked.connect(queryChangestab)
         self.queryPast.clicked.connect(queryPasttab)
         self.toDate.setVisible(False)
@@ -498,6 +506,7 @@ class ElementHistory(QDialog):
       #  self.filegrp.currentIndexChanged.connect(self.updateFields1())
         self.viewloaddata()
         self.viewOld.clicked.connect(accessPastFilestab)
+
 
     def updateFields(self):
         if self.comboBox.currentText()=="Version Num":
@@ -703,6 +712,7 @@ class AccessPastFiles(QDialog):
         self.editFile.clicked.connect(editFiletab)
         self.viewFiles.clicked.connect(viewFilestab)
         self.addFiles.clicked.connect(addFilestab)
+        self.monitor.clicked.connect(monitortab)
         self.queryChanges.clicked.connect(queryChangestab)
         self.elemHistory.clicked.connect(elemHistorytab)
         self.fromDate.setVisible(False)
@@ -815,9 +825,164 @@ class QueryPast(QDialog):
         self.editFile.clicked.connect(editFiletab)
         self.viewFiles.clicked.connect(viewFilestab)
         self.addFiles.clicked.connect(addFilestab)
+        self.monitor.clicked.connect(monitortab)
         self.viewOld.clicked.connect(accessPastFilestab)
         self.queryChanges.clicked.connect(queryChangestab)
         self.elemHistory.clicked.connect(elemHistorytab)
+        self.plus1.clicked.connect(self.add1)
+        self.plus2.clicked.connect(self.add2)
+        self.condition2.setVisible(False)
+        self.op2.setVisible(False)
+        self.condition3.setVisible(False)
+        self.op3.setVisible(False)
+        self.operator2.setVisible(False)
+        self.operator3.setVisible(False)
+        self.fromDate.setVisible(False)
+        self.dateFrom.setVisible(False)
+        self.fromvname.setVisible(False)
+        self.fromvnum.setVisible(False)
+        self.vnamefrom.setVisible(False)
+        self.vnumfrom.setVisible(False)
+        self.dateFrom.setDate(QDate.currentDate())
+        self.comboBox.currentIndexChanged.connect(self.updateFields)
+        self.viewloaddata()
+        self.treeWidget.itemClicked.connect(self.onItemClicked)
+        self.query.clicked.connect(self.formquery)
+
+    def onItemClicked(self):
+        print("hi")
+        item = self.treeWidget.currentItem()
+        k = self.getParentTree(item)
+        self.xpath.setText(k)
+
+    def getParentTree(self, item):
+        def getP(item, out):
+            if item.parent() is None:
+                return out;
+            out = item.parent().text(0) + "/" + out
+            return getP(item.parent(), out)
+
+        output = getP(item, item.text(0))
+        return output
+    def updateFields(self):
+        if self.comboBox.currentText()=="Version Num":
+            self.fromDate.setVisible(False)
+            self.dateFrom.setVisible(False)
+            self.fromvname.setVisible(False)
+            self.fromvnum.setVisible(True)
+            self.vnamefrom.setVisible(False)
+            self.vnumfrom.setVisible(True)
+        elif self.comboBox.currentText()=="Version Name":
+            self.fromDate.setVisible(False)
+            self.dateFrom.setVisible(False)
+            self.fromvname.setVisible(True)
+            self.fromvnum.setVisible(False)
+            self.vnamefrom.setVisible(True)
+            self.vnumfrom.setVisible(False)
+        elif self.comboBox.currentText()=="Date":
+            self.fromDate.setVisible(True)
+            self.dateFrom.setVisible(True)
+            self.fromvname.setVisible(False)
+            self.fromvnum.setVisible(False)
+            self.vnamefrom.setVisible(False)
+            self.vnumfrom.setVisible(False)
+
+    def viewloaddata(self):
+        list = firebase.get("/", "")
+        for a in list:
+            self.filegrp.addItem(a)
+        self.filegrp.currentIndexChanged.connect(self.updateFields1)
+
+    def updateFields1(self):
+        if self.comboBox.currentText() == "Version Num":
+            field = '/' + self.filegrp.currentText() + "/versions"
+            list = firebase.get(field, "")
+            self.vnumfrom.setValue(1)
+        if self.comboBox.currentText() == "Version Name":
+            versions = db.child(self.filegrp.currentText()).child("versions").get()
+            for version in versions.each():
+                self.vnamefrom.addItem(version.val()['version_name'])
+        latesturl = '/' + self.filegrp.currentText() + '/latestfileurl'
+        url = firebase.get(latesturl, "")
+        print(url)
+        path = storage.child(url).get_url(None)
+        print(path)
+        f = urllib.request.urlopen(path).read()
+        self.treeWidget.clear()
+        printtree(self.treeWidget, f)
+
+    def add1(self):
+        self.condition2.setVisible(True)
+        self.op2.setVisible(True)
+        self.operator2.setVisible(True)
+
+    def add2(self):
+        self.condition3.setVisible(True)
+        self.op3.setVisible(True)
+        self.operator3.setVisible(True)
+
+    def formquery(self):
+        fromfield=self.xpath.toPlainText()
+        predicates=[]
+        conditions=[self.condition1.toPlainText(),self.condition2.toPlainText(), self.condition3.toPlainText()]
+        operators=[self.operator1.currentText(), self.operator2.currentText(), self.operator3.currentText()]
+        ops=[self.op1.toPlainText(),self.op2.toPlainText(),self.op3.toPlainText()]
+        for i in range (0,3):
+            if conditions[i]!="" and ops[i]!="":
+                pred=conditions[i]+operators[i]+'\''+ops[i]+'\''
+                predicates.append(pred)
+        self.xquery(fromfield,predicates)
+
+
+    def xquery(self,fromfield,predicates):
+        latesturl = '/' + self.filegrp.currentText() + '/latestfileurl'
+        url = firebase.get(latesturl, "")
+        path = storage.child(url).get_url(None)
+        f = urllib.request.urlopen(path).read()
+        tree=et.fromstring(f)
+        fromfield=fromfield[len(tree.tag)+1:]
+        print(tree.findall(".//"+ fromfield+"["+predicates[0]+"]"))
+        # make it do all predicates and for versions version name and date
+
+
+class Monitor(QDialog):
+    def __init__(self):
+        super(Monitor, self).__init__()
+        loadUi("monitor.ui", self)
+        self.checkBox1.setVisible(False)
+        self.checkBox2.setVisible(False)
+        self.checkbox3.setVisible(False)
+        self.checkbox4.setVisible(False)
+        self.checkbox5.setVisible(False)
+        self.checkbox6.setVisible(False)
+        self.checkbox7.setVisible(False)
+        self.checkbox8.setVisible(False)
+        self.checkbox9.setVisible(False)
+        self.checkbox10.setVisible(False)
+        self.boxes=[self.checkBox1,self.checkBox2,self.checkbox3,self.checkbox4,self.checkbox5,self.checkbox6,self.checkbox7,self.checkbox8,self.checkbox9,self.checkbox10]
+        self.loadboxes()
+        self.save.clicked.connect(self.savesubs)
+
+    def savesubs(self):
+        for box in self.boxes:
+            if box.isChecked():
+                print(box)
+
+
+    def loadboxes(self):
+        list = firebase.get("/", "")
+        filegrps=[]
+        for a in list:
+            filegrps.append(a)
+            print(a)
+        for i in range(0,len(filegrps)):
+            self.boxes[i].setText(filegrps[i])
+            self.boxes[i].setVisible(True)
+
+def monitortab():
+    monitor=Monitor()
+    widget.addWidget(monitor)
+    widget.setCurrentIndex(widget.currentIndex()+1)
 
 def queryPasttab():
     querypast=QueryPast()
