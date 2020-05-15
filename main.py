@@ -568,6 +568,7 @@ class ElementHistory(QDialog):
         self.confirm.clicked.connect(self.getHistory)
 
     def getHistory(self):
+        versions = db.child(self.filegrp.currentText()).child("versions").get()
         if self.comboBox.currentText()=="Version Num":
             num1=self.vnumfrom.value()
             num2=self.vnumto.value()
@@ -575,63 +576,88 @@ class ElementHistory(QDialog):
             k=self.getParentTree(item)
             print(k)
             self.getElementHistory(item, k,num1, num2)
+        elif self.comboBox.currentText()=="Version Name":
+            for version in versions.each():
+                if version.val()["version_name"]==str(self.vnamefrom.currentText()):
+                    numfrom=version.val()["version_num"]
+                if version.val()["version_name"]==str(self.vnameto.currentText()):
+                    numto=version.val()["version_num"]
+            item = self.treeWidget.currentItem()
+            k = self.getParentTree(item)
+            self.getElementHistory(item, k, int(numfrom), int(numto))
+        elif self.comboBox.currentText()=="Date":
+            numfrom = -1
+            numto = -1
+            for version in versions.each():
+                print(version.val()["date"])
+                print(str(self.dateFrom.date().toPyDate()))
+                if version.val()["date"] >= str(self.dateFrom.date().toPyDate()):
+                    numfrom = version.val()["version_num"]
+                    break
+            for version in versions.each():
+                if version.val()["date"] <= str(self.dateTo.date().toPyDate()):
+                    numto = version.val()["version_num"]
+            item = self.treeWidget.currentItem()
+            k = self.getParentTree(item)
+            self.getElementHistory(item, k, int(numfrom), int(numto))
 
     def getElementHistory(self,item,parent,num1,num2):
         newes=et.Element("changes")
         output=""
         if num1==num2:
             self.textEdit.setText("No changes between a version and itself!")
-        elif num2-num1==1:
-            versions = db.child(self.filegrp.currentText()).child("versions").get()
-            parent=parent.replace('/', '.')
-            for version in versions.each():
-                if version.val()["version_num"] == str(num1):
-                    url = version.val()["url"]
-                    path = storage.child(url).get_url(None)
-                    f = urllib.request.urlopen(path).read()
-                    print(str(f))
-                    temp=et.fromstring(f)
-                    results=temp.findall(".//")
-                    for result in results:
-                        if result.tag=="insert":
-                            parentpath=result[2].attrib["parent"]
-                            indexParent=int(result[0].attrib["indexParent"])
-                            label=result[1].attrib["label"]
-                            pos=int(result[3].attrib["pos"])
-                            pin=self.getParentIndex(item)
-                            print(pin)
-                            print(indexParent)
-                            if parentpath==parent and item.parent().indexOfChild(item)==pos and indexParent==pin:
-                                output=output + "Moving from version " + str(num1) + " to version " + str(num2) + ", this element was inserted .\n"
-                        if result.tag=="update":
-                            parentpath = result[3].attrib["parent"]
-                            indexParent = int(result[0].attrib["indexParent"])
-                            initial = result[1].attrib["initial"][2:]
-                            new = result[2].attrib["new"][2:]
-                            pos = int(result[4].attrib["pos"])
-                            pin=self.getParentIndex(item)
-                            if parentpath == parent and item.parent().indexOfChild(item) == pos and indexParent==pin:
-                                if item.text(0)==initial or item.text(0)==new:
-                                    output = output + "Moving from " + str(num1) + " to " + str(
-                                        num2) + ", this element was updated from " + initial + " to " + new + ".\n"
-                        if result.tag=="delete":
-                            parentpath = result[2].attrib["parent"]
-                            indexParent = int(result[0].attrib["indexParent"])
-                            label = result[1].attrib["label"]
-                            pos = int(result[3].attrib["pos"])
-                            pin = self.getParentIndex(item)
-                            print(pin)
-                            print(indexParent)
-                            if parentpath == parent and indexParent == pin:
-                                if item.parent().indexOfChild(item) <= pos:
-                                    output = output + "Moving from version " + str(num1) + " to version " + str(
-                                        num2) + ", an element with label \"" + label + "\" was deleted from below this element .\n"
-                                else:
-                                    output = output + "Moving from version " + str(num1) + " to version " + str(
-                                        num2) + ", an element with label \"" + label + "\" was deleted from above this element .\n"
-
-                    print(output)
-                    self.textEdit.setText(output)
+        elif num2>num1:
+            while num1<num2:
+                versions = db.child(self.filegrp.currentText()).child("versions").get()
+                parent=parent.replace('/', '.')
+                for version in versions.each():
+                    if version.val()["version_num"] == str(num1):
+                        url = version.val()["url"]
+                        path = storage.child(url).get_url(None)
+                        f = urllib.request.urlopen(path).read()
+                        print(str(f))
+                        temp=et.fromstring(f)
+                        results=temp.findall(".//")
+                        for result in results:
+                            if result.tag=="insert":
+                                parentpath=result[2].attrib["parent"]
+                                indexParent=int(result[0].attrib["indexParent"])
+                                label=result[1].attrib["label"]
+                                pos=int(result[3].attrib["pos"])
+                                pin=self.getParentIndex(item)
+                                print(pin)
+                                print(indexParent)
+                                if parentpath==parent and item.parent().indexOfChild(item)==pos and indexParent==pin:
+                                    output=output + "Moving from version " + str(num1) + " to version " + str(num2) + ", this element was inserted .\n"
+                            if result.tag=="update":
+                                parentpath = result[3].attrib["parent"]
+                                indexParent = int(result[0].attrib["indexParent"])
+                                initial = result[1].attrib["initial"][2:]
+                                new = result[2].attrib["new"][2:]
+                                pos = int(result[4].attrib["pos"])
+                                pin=self.getParentIndex(item)
+                                if parentpath == parent and item.parent().indexOfChild(item) == pos and indexParent==pin:
+                                    if item.text(0)==initial or item.text(0)==new:
+                                        output = output + "Moving from " + str(num1) + " to " + str(
+                                            num2) + ", this element was updated from " + initial + " to " + new + ".\n"
+                            if result.tag=="delete":
+                                parentpath = result[2].attrib["parent"]
+                                indexParent = int(result[0].attrib["indexParent"])
+                                label = result[1].attrib["label"]
+                                pos = int(result[3].attrib["pos"])
+                                pin = self.getParentIndex(item)
+                                print(pin)
+                                print(indexParent)
+                                if parentpath == parent and indexParent == pin:
+                                    if item.parent().indexOfChild(item) <= pos:
+                                        output = output + "Moving from version " + str(num1) + " to version " + str(
+                                            num2) + ", an element with label \"" + label + "\" was deleted from below this element .\n"
+                                    else:
+                                        output = output + "Moving from version " + str(num1) + " to version " + str(
+                                            num2) + ", an element with label \"" + label + "\" was deleted from above this element .\n"
+                num1=num1+1
+            print(output)
+            self.textEdit.setText(output)
 
                    #     if results.attrib()["label"]==item.
 
