@@ -476,7 +476,7 @@ border: 1px solid white;
 </string>
    </property>
    <property name="text">
-    <string>Montior Files</string>
+    <string>Monitor Files</string>
    </property>
   </widget>
   <zorder>listView</zorder>

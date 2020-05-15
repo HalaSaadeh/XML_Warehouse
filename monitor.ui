@@ -293,7 +293,7 @@ border: 1px solid white;
    </property>
    <property name="styleSheet">
     <string notr="true">  border: none;
-background-color: #7d97a5 ;
+background-color: #becbd2  ;
 
 
   color: white;
@@ -308,7 +308,7 @@ border: 1px solid white;
 </string>
    </property>
    <property name="text">
-    <string>Montior Files</string>
+    <string>Monitor Files</string>
    </property>
   </widget>
   <widget class="QCheckBox" name="checkBox1">
@@ -475,7 +475,7 @@ border: 1px solid white;
    <property name="geometry">
     <rect>
      <x>910</x>
-     <y>780</y>
+     <y>790</y>
      <width>141</width>
      <height>51</height>
     </rect>
@@ -486,6 +486,52 @@ border: 1px solid white;
    </property>
    <property name="text">
     <string>Save</string>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="tableWidget">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>260</y>
+     <width>481</width>
+     <height>511</height>
+    </rect>
+   </property>
+   <column>
+    <property name="text">
+     <string>Notifications</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QLabel" name="previewLabel_2">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>220</y>
+     <width>361</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: #303e45 ;
+  font-size: 22px;
+font-family: helvetica;</string>
+   </property>
+   <property name="text">
+    <string>Recent Activity in your Subscriptions</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="refresh">
+   <property name="geometry">
+    <rect>
+     <x>970</x>
+     <y>220</y>
+     <width>93</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Refresh</string>
    </property>
   </widget>
  </widget>

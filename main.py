@@ -1049,6 +1049,7 @@ def printElem(elem):
 
 
 class Monitor(QDialog):
+    subs=[]
     def __init__(self):
         super(Monitor, self).__init__()
         loadUi("monitor.ui", self)
@@ -1065,14 +1066,58 @@ class Monitor(QDialog):
         self.boxes=[self.checkBox1,self.checkBox2,self.checkbox3,self.checkbox4,self.checkbox5,self.checkbox6,self.checkbox7,self.checkbox8,self.checkbox9,self.checkbox10]
         self.loadboxes()
         self.save.clicked.connect(self.savesubs)
+        self.loadNotifs()
+        self.subs=[]
+        self.tableWidget.setColumnWidth(0, 460)
+        self.refresh.clicked.connect(self.loadNotifs)
+
+
+    def loadNotifs(self):
+        email = auth.get_account_info(login['idToken'])['users'][0]['email']
+        user = email.split('@')[0]
+        a=0
+        rows=0
+        list = firebase.get('/', "")
+        self.tableWidget.setRowCount(len(list))
+        count=0
+        for a in list:
+            for k in list[a]["subscriptions"]:
+                for ak in list[a]["subscriptions"][k]:
+                    if list[a]["subscriptions"][k][ak]==user:
+                        self.boxes[count].setChecked(True)
+                        field='/'+a+'/versions'
+                        newlist=firebase.get(field, "")
+                        numver=len(newlist)
+                        for b in newlist:
+                            print(int(newlist[b]["version_num"]))
+                            print(numver)
+                            if int(newlist[b]["version_num"])==numver:
+                                output="Recently, "+newlist[b]["username"]+ " added a new version to " + a+ " called "+ newlist[b]["version_name"]
+                                newitem = QtWidgets.QTableWidgetItem(output)
+                                self.tableWidget.setItem(rows, 0, newitem)
+                                rows=rows+1
+            count=count+1
 
     def savesubs(self):
         email = auth.get_account_info(login['idToken'])['users'][0]['email']
         user=email.split('@')[0]
         for box in self.boxes:
+            yes = True
             if box.isChecked():
-                db.child(box.text()).child("subscriptions").set({"username":user})
-                print(box.text())
+                s = db.child(box.text()).child("subscriptions").get()
+                if s.each() is not None:
+                    for v in s.each():
+                        if v.val()["username"] == user:
+                            yes=False
+                if yes:
+                    self.subs.append(box.text())
+                    db.child(box.text()).child("subscriptions").push({"username":user})
+            else:
+                s=db.child(box.text()).child("subscriptions").get()
+                if s.each() is not None:
+                    for v in s.each():
+                        if v.val()["username"]==user:
+                            s = db.child(box.text()).child("subscriptions").child(v.key()).remove()
 
 
 
@@ -1081,7 +1126,6 @@ class Monitor(QDialog):
         filegrps=[]
         for a in list:
             filegrps.append(a)
-            print(a)
         for i in range(0,len(filegrps)):
             self.boxes[i].setText(filegrps[i])
             self.boxes[i].setVisible(True)
