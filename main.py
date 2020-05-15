@@ -574,6 +574,74 @@ class ElementHistory(QDialog):
             item = self.treeWidget.currentItem()
             k=self.getParentTree(item)
             print(k)
+            self.getElementHistory(item, k,num1, num2)
+
+    def getElementHistory(self,item,parent,num1,num2):
+        newes=et.Element("changes")
+        output=""
+        if num1==num2:
+            self.textEdit.setText("No changes between a version and itself!")
+        elif num2-num1==1:
+            versions = db.child(self.filegrp.currentText()).child("versions").get()
+            parent=parent.replace('/', '.')
+            for version in versions.each():
+                if version.val()["version_num"] == str(num1):
+                    url = version.val()["url"]
+                    path = storage.child(url).get_url(None)
+                    f = urllib.request.urlopen(path).read()
+                    print(str(f))
+                    temp=et.fromstring(f)
+                    results=temp.findall(".//")
+                    for result in results:
+                        if result.tag=="insert":
+                            parentpath=result[2].attrib["parent"]
+                            indexParent=int(result[0].attrib["indexParent"])
+                            label=result[1].attrib["label"]
+                            pos=int(result[3].attrib["pos"])
+                            pin=self.getParentIndex(item)
+                            print(pin)
+                            print(indexParent)
+                            if parentpath==parent and item.parent().indexOfChild(item)==pos and indexParent==pin:
+                                output=output + "Moving from version " + str(num1) + " to version " + str(num2) + ", this element was inserted .\n"
+                        if result.tag=="update":
+                            parentpath = result[3].attrib["parent"]
+                            indexParent = int(result[0].attrib["indexParent"])
+                            initial = result[1].attrib["initial"][2:]
+                            new = result[2].attrib["new"][2:]
+                            pos = int(result[4].attrib["pos"])
+                            pin=self.getParentIndex(item)
+                            if parentpath == parent and item.parent().indexOfChild(item) == pos and indexParent==pin:
+                                if item.text(0)==initial or item.text(0)==new:
+                                    output = output + "Moving from " + str(num1) + " to " + str(
+                                        num2) + ", this element was updated from " + initial + " to " + new + ".\n"
+                        if result.tag=="delete":
+                            parentpath = result[2].attrib["parent"]
+                            indexParent = int(result[0].attrib["indexParent"])
+                            label = result[1].attrib["label"]
+                            pos = int(result[3].attrib["pos"])
+                            pin = self.getParentIndex(item)
+                            print(pin)
+                            print(indexParent)
+                            if parentpath == parent and indexParent == pin:
+                                if item.parent().indexOfChild(item) <= pos:
+                                    output = output + "Moving from version " + str(num1) + " to version " + str(
+                                        num2) + ", an element with label \"" + label + "\" was deleted from below this element .\n"
+                                else:
+                                    output = output + "Moving from version " + str(num1) + " to version " + str(
+                                        num2) + ", an element with label \"" + label + "\" was deleted from above this element .\n"
+
+                    print(output)
+                    self.textEdit.setText(output)
+
+                   #     if results.attrib()["label"]==item.
+
+    def getParentIndex(self,s):
+        def getPIndex(a):
+            if (a.parent()).parent() is None:
+                return a.parent().indexOfChild(a)
+            return getPIndex(a.parent())
+        return getPIndex(s)
+
 
     def getParentTree(self,item):
         def getP(item,out):

@@ -1,1 +1,1 @@
-<editscript><insert><indexParent indexParent="0" /><label label="( Systems" /><parent parent="LAU.Course.name." /><pos pos="1" /></insert></editscript>
+<editscript><delete><indexParent indexParent="0" /><label label="( Guide" /><parent parent="catalog.book.title." /><pos pos="2" /></delete><delete><indexParent indexParent="0" /><label label="( applications" /><parent parent="catalog.book.description." /><pos pos="5" /></delete></editscript>
