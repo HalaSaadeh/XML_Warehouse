@@ -127,10 +127,10 @@ font-size:14px;
   <widget class="QTableWidget" name="tableWidget">
    <property name="geometry">
     <rect>
-     <x>240</x>
+     <x>310</x>
      <y>280</y>
-     <width>491</width>
-     <height>311</height>
+     <width>701</width>
+     <height>371</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -138,7 +138,7 @@ font-size:14px;
 align:center;</string>
    </property>
    <property name="columnCount">
-    <number>3</number>
+    <number>4</number>
    </property>
    <attribute name="horizontalHeaderDefaultSectionSize">
     <number>117</number>
@@ -159,6 +159,11 @@ align:center;</string>
    <column>
     <property name="text">
      <string>Date Added</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Added by User</string>
     </property>
    </column>
   </widget>
@@ -188,7 +193,7 @@ color: #435761;</string>
     <rect>
      <x>230</x>
      <y>70</y>
-     <width>461</width>
+     <width>781</width>
      <height>31</height>
     </rect>
    </property>
@@ -199,35 +204,7 @@ color: #435761  ;
 </string>
    </property>
    <property name="text">
-    <string> File Viewer</string>
-   </property>
-  </widget>
-  <widget class="QTextBrowser" name="previewBox">
-   <property name="geometry">
-    <rect>
-     <x>770</x>
-     <y>280</y>
-     <width>321</width>
-     <height>481</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="previewLabel">
-   <property name="geometry">
-    <rect>
-     <x>770</x>
-     <y>250</y>
-     <width>191</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">color: #303e45 ;
-  font-size: 22px;
-font-family: helvetica;</string>
-   </property>
-   <property name="text">
-    <string>Preview</string>
+    <string> File Viewer - Preview Files in the XML Warehouse</string>
    </property>
   </widget>
   <widget class="QPushButton" name="queryChanges">

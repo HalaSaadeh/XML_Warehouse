@@ -481,6 +481,22 @@ border: 1px solid white;
     <string>Montior Files</string>
    </property>
   </widget>
+  <widget class="QLabel" name="versionSuccess">
+   <property name="geometry">
+    <rect>
+     <x>700</x>
+     <y>780</y>
+     <width>181</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-size:15px;</string>
+   </property>
+   <property name="text">
+    <string>Version added successfully! </string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

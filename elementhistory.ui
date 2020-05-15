@@ -567,7 +567,7 @@ font-family: helvetica;</string>
 font-family: helvetica;</string>
    </property>
    <property name="text">
-    <string>History</string>
+    <string>Change History</string>
    </property>
   </widget>
   <widget class="QPushButton" name="confirm">

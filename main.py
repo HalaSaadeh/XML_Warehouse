@@ -46,15 +46,19 @@ class Login(QDialog):
         self.login.clicked.connect(self.loginFunc)
         self.createAcc.clicked.connect(self.createAccount)
         self.passField.setEchoMode(QtWidgets.QLineEdit.Password)
-
+        self.invalid.setVisible(False)
     def loginFunc(self):
         global login
         email=self.emailField.toPlainText()
         password=self.passField.text()
-        login = auth.sign_in_with_email_and_password(email, password)
-        mainwindow = MainWindow()
-        widget.addWidget(mainwindow)
-        widget.setCurrentIndex(widget.currentIndex() + 1)
+        try:
+            login = auth.sign_in_with_email_and_password(email, password)
+            mainwindow = MainWindow()
+            widget.addWidget(mainwindow)
+            widget.setCurrentIndex(widget.currentIndex() + 1)
+        except:
+            self.invalid.setVisible(True)
+
 
     def createAccount(self):
         createacc=CreateAcc()
@@ -68,14 +72,18 @@ class CreateAcc(QDialog):
         self.confirm.clicked.connect(self.confirmFunc)
         self.passField.setEchoMode(QtWidgets.QLineEdit.Password)
         self.passField_2.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.invalid.setVisible(False)
 
     def confirmFunc(self):
         email = self.emailField.toPlainText()
         password = self.passField.text()
-        user = auth.create_user_with_email_and_password(email, password)
-        login = Login()
-        widget.addWidget(login)
-        widget.setCurrentIndex(widget.currentIndex() + 1)
+        try:
+            user = auth.create_user_with_email_and_password(email, password)
+            login = Login()
+            widget.addWidget(login)
+            widget.setCurrentIndex(widget.currentIndex() + 1)
+        except:
+            self.invalid.setVisible(True)
 
 class AddFiles(QDialog):
     def __init__(self):
@@ -120,7 +128,6 @@ class AddFiles(QDialog):
         else:
             field = '/' + self.comboBox.currentText() + "/versions"
             list = firebase.get(field, "")
-            print(list)
             self.versionNum.setText(str(len(list) + 1))
             self.versionNum.setReadOnly(True)
             self.versionNum.setDisabled(True)
@@ -130,6 +137,7 @@ class AddFiles(QDialog):
         self.nameField.setVisible(True)
         self.versionNum.setText(str(1))
         self.versionNum.setReadOnly(True)
+        self.comboBox.addItem(self.nameField.toPlainText())
 
     def addVersion(self):
         self.entername2.setVisible(False)
@@ -163,6 +171,13 @@ class AddFiles(QDialog):
                 latesturl='/'+self.comboBox.currentText()+'/latestfileurl'
                 firebase.post(puturl, data)
                 db.child(self.comboBox.currentText()).update({"latestfileurl": cloudfilename})
+        self.versionSuccess.setVisible(True)
+        self.uploadField.clear()
+        self.nameField.clear()
+        self.name.clear()
+        self.versionNum.clear()
+        self.dateEdit.setDate(QDate.currentDate())
+
 
     def validateName(self):
         if len(self.name.toPlainText()) == int(0):
@@ -201,12 +216,11 @@ class MainWindow(QDialog):
         self.tableWidget.setColumnWidth(0, 120)
         self.tableWidget.setColumnWidth(1, 190)
         self.tableWidget.setColumnWidth(2, 150)
+        self.tableWidget.setColumnWidth(3, 200)
         self.monitor.clicked.connect(monitortab)
         self.viewloaddata()
         self.addFiles.clicked.connect(addFilestab)
         self.editFile.clicked.connect(editFiletab)
-        self.previewBox.setVisible(False)
-        self.previewLabel.setVisible(False)
         self.queryChanges.clicked.connect(queryChangestab)
         self.elemHistory.clicked.connect(elemHistorytab)
         self.viewOld.clicked.connect(accessPastFilestab)
@@ -230,7 +244,9 @@ class MainWindow(QDialog):
             self.tableWidget.setItem(row, 0, QtWidgets.QTableWidgetItem(str(list[a]["version_num"])))
             self.tableWidget.setItem(row, 1, QtWidgets.QTableWidgetItem(str(list[a]["version_name"])))
             self.tableWidget.setItem(row, 2, QtWidgets.QTableWidgetItem(str(list[a]["date"])))
+            self.tableWidget.setItem(row,3, QtWidgets.QTableWidgetItem(str(list[a]["username"])))
             row = row + 1
+
 
 class EditFile(QDialog):
     p=""
@@ -251,6 +267,7 @@ class EditFile(QDialog):
         self.elemHistory.clicked.connect(elemHistorytab)
         self.viewOld.clicked.connect(accessPastFilestab)
         self.queryPast.clicked.connect(queryPasttab)
+        self.versionSuccess.setVisible(False)
 
     def viewloaddata(self):
         list = firebase.get("/", "")
@@ -305,6 +322,10 @@ class EditFile(QDialog):
                 latesturl = '/' + self.comboBox.currentText() + '/latestfileurl'
                 firebase.post(puturl, data)
                 db.child(self.comboBox.currentText()).update({"latestfileurl": cloudfilename})
+        self.name.clear()
+        self.versionNum.clear()
+        self.textEdit.clear()
+        self.versionSuccess.setVisible(True)
 
 def patchDocs(pathfile,pathes):
     patch=PatchingUtil(pathfile,pathes)
@@ -458,7 +479,8 @@ class QueryChanges(QDialog):
             self.vnameto.setVisible(False)
             self.vnumfrom.setVisible(False)
             self.vnumto.setVisible(False)
-
+        if self.filegrp.currentText()!="":
+            self.updateFields1()
     def viewloaddata(self):
         list = firebase.get("/", "")
         for a in list:
@@ -467,6 +489,8 @@ class QueryChanges(QDialog):
 
 
     def updateFields1(self):
+        self.vnamefrom.clear()
+        self.vnameto.clear()
         if self.comboBox.currentText()=="Version Num":
             field = '/' + self.filegrp.currentText() + "/versions"
             list = firebase.get(field, "")
@@ -548,7 +572,8 @@ class ElementHistory(QDialog):
             self.vnameto.setVisible(False)
             self.vnumfrom.setVisible(False)
             self.vnumto.setVisible(False)
-
+        if self.filegrp.currentText()!="":
+            self.updateFields1()
     def viewloaddata(self):
         list = firebase.get("/", "")
         for a in list:
@@ -556,6 +581,9 @@ class ElementHistory(QDialog):
         self.filegrp.currentIndexChanged.connect(self.updateFields1)
 
     def updateFields1(self):
+        self.textEdit.clear()
+        self.vnamefrom.clear()
+        self.vnameto.clear()
         if self.comboBox.currentText() == "Version Num":
             field = '/' + self.filegrp.currentText() + "/versions"
             list = firebase.get(field, "")
@@ -583,7 +611,6 @@ class ElementHistory(QDialog):
             num2=self.vnumto.value()
             item = self.treeWidget.currentItem()
             k=self.getParentTree(item)
-            print(k)
             self.getElementHistory(item, k,num1, num2)
         elif self.comboBox.currentText()=="Version Name":
             for version in versions.each():
@@ -637,7 +664,7 @@ class ElementHistory(QDialog):
                                 print(pin)
                                 print(indexParent)
                                 if parentpath==parent and item.parent().indexOfChild(item)==pos and indexParent==pin:
-                                    output=output + "Moving from version " + str(num1) + " to version " + str(num2) + ", this element was inserted .\n"
+                                    output=output + "Moving from version " + str(num1) + " to version " + str(num1+1) + ", this element was inserted .\n"
                             if result.tag=="update":
                                 parentpath = result[3].attrib["parent"]
                                 indexParent = int(result[0].attrib["indexParent"])
@@ -648,7 +675,7 @@ class ElementHistory(QDialog):
                                 if parentpath == parent and item.parent().indexOfChild(item) == pos and indexParent==pin:
                                     if item.text(0)==initial or item.text(0)==new:
                                         output = output + "Moving from " + str(num1) + " to " + str(
-                                            num2) + ", this element was updated from " + initial + " to " + new + ".\n"
+                                            num1+1) + ", this element was updated from " + initial + " to " + new + ".\n"
                             if result.tag=="delete":
                                 parentpath = result[2].attrib["parent"]
                                 indexParent = int(result[0].attrib["indexParent"])
@@ -660,7 +687,7 @@ class ElementHistory(QDialog):
                                 if parentpath == parent and indexParent == pin:
                                     if item.parent().indexOfChild(item) <= pos:
                                         output = output + "Moving from version " + str(num1) + " to version " + str(
-                                            num2) + ", an element with label \"" + label + "\" was deleted from below this element .\n"
+                                            num1+1) + ", an element with label \"" + label + "\" was deleted from below this element .\n"
                                     else:
                                         output = output + "Moving from version " + str(num1) + " to version " + str(
                                             num2) + ", an element with label \"" + label + "\" was deleted from above this element .\n"
